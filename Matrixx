@@ -16,7 +16,7 @@ breakfast larry user && make installclean && mka bacon; \
 rm -rf out/target/product/vanilla && rm -rf out/target/product/gapps; \
 cd out/target/product && mv larry vanilla && cd ../../..; \
 # Gapps Build
-cd device/xiaomi/ && rm lineage_larry.mk && mv gapps.txt lineage_larry.mk && cd ../../..; \
+cd device/oneplus/larry && rm lineage_larry.mk && mv gapps.txt lineage_larry.mk && cd ../../..; \
 . build/envsetup.sh; \
 breakfast larry user && make installclean && mka bacon; \
 cd out/target/product && mv larry gapps && cd ../../..; \
