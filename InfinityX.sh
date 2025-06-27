@@ -11,12 +11,12 @@ repo init --no-repo-verify --git-lfs -u https://github.com/ProjectInfinity-X/man
 /opt/crave/resync.sh
 
 # Clone required device, vendor, kernel, hardware repos
-git clone https://github.com/anshedu/android_device_oneplus_larry -b InfinityX device/oneplus/larry
-git clone https://github.com/anshedu/android_device_oneplus_sm6375-common -b InfinityX device/oneplus/sm6375-common
-git clone https://github.com/anshedu/proprietary_vendor_oneplus_larry -b lineage-22.2 vendor/oneplus/larry
-git clone https://github.com/anshedu/proprietary_vendor_oneplus_sm6375-common -b lineage-22.2 vendor/oneplus/sm6375-common
-git clone https://github.com/anshedu/android_kernel_oneplus_sm6375 -b lineage-22.2 kernel/oneplus/sm6375
-git clone https://github.com/anshedu/hardware_oplus -b fifteen hardware/oplus
+git clone https://github.com/imCrest/android_device_oneplus_larry -b InfinityX device/oneplus/larry
+git clone https://github.com/imCrest/android_device_oneplus_sm6375-common -b InfinityX device/oneplus/sm6375-common
+git clone https://github.com/imCrest/proprietary_vendor_oneplus_larry -b lineage-22.2 vendor/oneplus/larry
+git clone https://github.com/imCrest/proprietary_vendor_oneplus_sm6375-common -b lineage-22.2 vendor/oneplus/sm6375-common
+git clone https://github.com/imCrest/android_kernel_oneplus_sm6375 -b lineage-22.2 kernel/oneplus/sm6375
+git clone https://github.com/imCrest/hardware_oplus -b fifteen hardware/oplus
 
 # --- Vanilla Build ---
 . build/envsetup.sh
