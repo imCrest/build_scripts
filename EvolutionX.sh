@@ -27,6 +27,8 @@ git clone https://github.com/anshedu/proprietary_vendor_oneplus_larry -b lineage
 git clone https://github.com/anshedu/proprietary_vendor_oneplus_sm6375-common -b lineage-22.2 vendor/oneplus/sm6375-common && \
 git clone https://github.com/anshedu/android_kernel_oneplus_sm6375 -b lineage-22.2 kernel/oneplus/sm6375 && \
 git clone https://github.com/anshedu/android_hardware_oplus -b lineage-22.2 hardware/oplus && \
+rm -rf packages/apps/ViPER4AndroidFX && \
+git clone https://github.com/AxionAOSP/android_packages_apps_ViPER4AndroidFX -b v4a packages/apps/ViPER4AndroidFX && \
 # Vanilla Build
 . build/envsetup.sh && \
 breakfast larry user && make installclean && mka bacon; \
