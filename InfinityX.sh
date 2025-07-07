@@ -2,7 +2,6 @@
 
 rm -rf .repo/local_manifests; \
 rm -rf {device,vendor,kernel,hardware}/oneplus && \
-rm -rf prebuilts/clang/host/linux-x86 \
 repo init --no-repo-verify --git-lfs -u https://github.com/ProjectInfinity-X/manifest -b 15 -g default,-mips,-darwin,-notdefault && \
 /opt/crave/resync.sh && \
 git clone https://github.com/anshedu/android_device_oneplus_larry -b Infinity15 device/oneplus/larry && \
