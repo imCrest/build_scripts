@@ -13,11 +13,11 @@ git clone https://github.com/anshedu/android_kernel_oneplus_sm6375 -b lineage-22
 git clone https://github.com/anshedu/android_hardware_oplus -b lineage-22.2 hardware/oplus && \
 # Vanilla Build
 . build/envsetup.sh && \
-lunch larry user && make installclean && mka bacon; \
+lunch infinity_larry-user && make installclean && mka bacon; \
 rm -rf out/target/product/vanilla && rm -rf out/target/product/gapps; \
 cd out/target/product && mv larry vanilla && cd ../../..; \
 # Gapps Build
 cd device/oneplus/larry && rm infinity_larry.mk && mv gapps.txt infinity_larry.mk && cd ../../..; \
 . build/envsetup.sh; \
-lunch larry user && make installclean && mka bacon; \
+lunch infinity_larry-user && make installclean && mka bacon; \
 cd out/target/product && mv larry gapps && cd ../../..; \
