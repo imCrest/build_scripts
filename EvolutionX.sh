@@ -17,7 +17,7 @@ lunch lineage_larry-bp2a-user && make installclean && m evolution; \
 rm -rf out/target/product/vanilla && rm -rf out/target/product/gapps; \
 cd out/target/product && mv larry vanilla && cd ../../..; \
 # Gapps Build
-cd device/oneplus/larry && rm lineage_larry.mk && mv gapps.txt lineage_larry.mk && cd ../../..; \
+cd device/oneplus/larry && rm larry.mk && mv gapps.txt larry.mk && cd ../../..; \
 . build/envsetup.sh; \
 lunch lineage_larry-bp2a-user && make installclean && m evolution; \
 cd out/target/product && mv larry gapps && cd ../../..; \
