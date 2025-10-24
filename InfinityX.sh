@@ -7,7 +7,7 @@
 
 
 # --- Init ROM repo ---
-repo init -u https://github.com/Mi-Apollo/infinity_manifest.git -b 16 --git-lfs && \
+repo init -u https://github.com/ProjectInfinity-X/manifest -b 16 --git-lfs && \
 
 # --- Sync ROM ---
 #/opt/crave/resync.sh && \
