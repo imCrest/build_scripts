@@ -38,7 +38,7 @@ git clone https://github.com/LineageOS/android_hardware_oplus -b lineage-23.0 ha
 # --- Vanilla Build ---
 echo "===== Starting Vanilla Build ====="
 . build/envsetup.sh && \
-lunch infinity-larry-user && \
+lunch infinity-larry-userdebug && \
 make installclean && \
 m bacon && \
 mv device/oneplus/larry/infinity_larry.mk device/oneplus/larry/vanilla.txt && \
