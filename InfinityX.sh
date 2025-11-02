@@ -10,8 +10,7 @@
 repo init -u https://github.com/ProjectInfinity-X/manifest -b 16 --git-lfs && \
 
 # --- Sync ROM ---
-#/opt/crave/resync.sh && \
-repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+/opt/crave/resync.sh && \
 
 # --- Clone Device Tree ---
 git clone https://github.com/anshedu/android_device_oneplus_larry -b lineage-22.2 device/oneplus/larry && \
@@ -38,7 +37,7 @@ git clone https://github.com/LineageOS/android_hardware_oplus -b lineage-23.0 ha
 # --- Vanilla Build ---
 echo "===== Starting Vanilla Build ====="
 . build/envsetup.sh && \
-lunch infinity-larry-userdebug && \
+lunch infinity_larry-userdebug && \
 make installclean && \
 m bacon && \
 mv device/oneplus/larry/infinity_larry.mk device/oneplus/larry/vanilla.txt && \
