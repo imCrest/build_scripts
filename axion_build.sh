@@ -1,80 +1,57 @@
-#!/usr/bin/env bash
-# axion_build.sh — AxionOS dual build (Vanilla + GApps) for OnePlus larry
+#   axion Build Script
+#   For: Vanilla + Gapps
+# =============================
 
-set -euo pipefail
 
-DEVICE="larry"
-TARGET="axion_${DEVICE}-userdebug"
-OUT="out/target/product/${DEVICE}"
-JOBS="$(nproc || echo 8)"
-STAGE="${HOME}/Downloads"
+# --- Init ROM repo ---
+repo init -u repo init -u https://github.com/AxionAOSP/android.git -b lineage-23.0 --git-lfs && \
 
-# Speed-ups
-export USE_CCACHE=1
-export CCACHE_DIR="${HOME}/.ccache"
-command -v ccache >/dev/null 2>&1 && ccache -M 50G || true
+# --- Sync ROM ---
+/opt/crave/resync.sh && \
 
-log() { echo -e "\n\033[1;36m[$(date +'%F %T')] $*\033[0m"; }
-die() { echo -e "\n\033[1;31mERROR:\033[0m $*" >&2; exit 1; }
+# --- Clone Device Tree ---
+git clone clone https://github.com/sahusujall/android_device_oneplus_larry/tree/axion-23.0 device/oneplus/larry && \
 
-pick_zip() {
-  # returns newest product zip path or dies
-  local z
-  z="$(ls -1t "${OUT}"/*.zip 2>/dev/null | head -n1 || true)"
-  [[ -z "${z}" ]] && die "No zip found in ${OUT}"
-  printf "%s" "${z}"
-}
+# --- Clone Common Device Tree ---
+git clone https://github.com/anshedu/android_device_oneplus_sm6375-common -b infinityx16 device/oneplus/sm6375-common
+# --- Clone Vendor Tree ---
+git clone https://github.com/anshedu/proprietary_vendor_oneplus_larry -b lineage-23.0 vendor/oneplus/larry && \
 
-stage_zip() {
-  local tag="$1"
-  mkdir -p "${STAGE}"
-  local z base dest
-  z="$(pick_zip)"
-  base="$(basename "${z}" .zip)"
-  dest="${STAGE}/${base}-${tag^^}.zip"
-  chmod +r "${z}" || true
-  cp -f "${z}" "${dest}"
-  log "✅ Staged → ${dest}"
-}
+# --- Clone Common Vendor Tree ---
+git clone https://github.com/anshedu/proprietary_vendor_oneplus_sm6375-common -b lineage-23.0 vendor/oneplus/sm6375-common && \
 
-light_clean() {
-  log "🧹 installclean"
-  make installclean -j"${JOBS}" || true
-  rm -rf "${OUT}/obj/KERNEL_OBJ" 2>/dev/null || true
-}
+# --- Clone Kernel Tree ---
+git clone https://github.com/anshedu/android_kernel_oneplus_sm6375 -b lineage-23.0 kernel/oneplus/sm6375 && \
 
-log "🔄 repo init AxionOS (lineage-23.0)…"
-repo init -u https://github.com/AxionAOSP/android.git -b lineage-23.0 --git-lfs
-repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j8
+# --- Clone Hardware Tree ---
+git clone https://github.com/LineageOS/android_hardware_oplus -b lineage-23.0 hardware/oplus && \
 
-log "📂 cloning device/vendor/kernel trees…"
-# Device tree on your new branch:
-git clone https://github.com/sahusujall/android_device_oneplus_larry -b axion-23.0 device/oneplus/larry
+# =============================
+#  Build: Vanilla → Gapps
+# =============================
 
-# Common/vendor/kernel — adjust to your known-good lineage-23.0 branches if needed
-git clone https://github.com/anshedu/android_device_oneplus_sm6375-common -b lineage-23.0 device/oneplus/sm6375-common || true
-git clone https://github.com/anshedu/proprietary_vendor_oneplus_larry -b lineage-23.0 vendor/oneplus/larry || true
-git clone https://github.com/anshedu/proprietary_vendor_oneplus_sm6375-common -b lineage-23.0 vendor/oneplus/sm6375-common || true
-git clone https://github.com/imCrest/android_kernel_oneplus_sm6375 -b lineage-22.2 kernel/oneplus/sm6375 || true
-git clone https://github.com/LineageOS/android_hardware_oplus -b lineage-23.0 hardware/oplus || true
+# --- Vanilla Build ---
+echo "===== Starting Vanilla Build ====="
+. build/envsetup.sh && \
+lunch axion-23.0_larry-userdebug && \
+make installclean && \
+m bacon && \
+mv device/oneplus/larry/axion_larry.mk device/oneplus/larry/vanilla.txt && \
 
-log "🧠 envsetup + lunch ${TARGET}"
-source build/envsetup.sh
-lunch "${TARGET}" >/dev/null || die "lunch ${TARGET} failed"
+echo "===== Handling Vanilla Output ====="
+mv out/target/product/larry out/target/product/vanilla && \
 
-# ---------- VANILLA ----------
-log "⚙️ Building VANILLA (no GApps)…"
-export WITH_GMS=false
-export TARGET_GAPPS=false TARGET_INCLUDE_GOOGLE_APPS=false
-light_clean
-mka bacon -j"${JOBS}"
-stage_zip "vanilla"
+# --- Gapps Build ---
+echo "===== Setting up for Gapps Build ====="
+mv device/oneplus/larry/gapps.txt device/oneplus/larry/axion_larry.mk && \
+make installclean && \
+m bacon && \
+mv device/oneplus/larry/axion_larry.mk device/oneplus/larry/gapps.txt && \
 
-# ---------- GAPPS ----------
-log "⚙️ Building G A P P S …"
-unset WITH_GMS TARGET_GAPPS TARGET_INCLUDE_GOOGLE_APPS
-light_clean
-mka bacon -j"${JOBS}"
-stage_zip "gapps"
+echo "===== Handling Gapps Output ====="
+mv out/target/product/larry out/target/product/gapps && \
 
-log "🎉 Done! Check ${STAGE} for -VANILLA and -GAPPS zips."
+# --- Restore Vanilla ---
+mv device/oneplus/larry/vanilla.txt device/oneplus/larry/axion_larry.mk && \
+
+echo "===== All builds completed successfully! ====="
