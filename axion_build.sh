@@ -1,19 +1,19 @@
-#   axion Build Script
+#   Lunaris Build Script
 #   For: Vanilla + Gapps
 # =============================
 
-
 # --- Init ROM repo ---
-repo init -u repo init -u https://github.com/AxionAOSP/android.git -b lineage-23.0 --git-lfs && \
+repo init -u https://github.com/Lunaris-AOSP/android.git -b 16 --git-lfs && \
 
 # --- Sync ROM ---
 /opt/crave/resync.sh && \
 
 # --- Clone Device Tree ---
-git clone clone https://github.com/sahusujall/android_device_oneplus_larry/tree/axion-23.0 device/oneplus/larry && \
+git clone https://github.com/sahusujall/android_device_oneplus_larry -b Lunaris device/oneplus/larry && \
 
 # --- Clone Common Device Tree ---
-git clone https://github.com/anshedu/android_device_oneplus_sm6375-common -b infinityx16 device/oneplus/sm6375-common
+git clone https://github.com/anshedu/android_device_oneplus_sm6375-common -b infinityx16 device/oneplus/sm6375-common && \
+
 # --- Clone Vendor Tree ---
 git clone https://github.com/anshedu/proprietary_vendor_oneplus_larry -b lineage-23.0 vendor/oneplus/larry && \
 
@@ -33,25 +33,25 @@ git clone https://github.com/LineageOS/android_hardware_oplus -b lineage-23.0 ha
 # --- Vanilla Build ---
 echo "===== Starting Vanilla Build ====="
 . build/envsetup.sh && \
-lunch axion-23.0_larry-userdebug && \
+lunch lunaris_larry-userdebug && \
 make installclean && \
 m bacon && \
-mv device/oneplus/larry/axion_larry.mk device/oneplus/larry/vanilla.txt && \
+mv device/oneplus/larry/lunaris_larry.mk device/oneplus/larry/vanilla.txt && \
 
 echo "===== Handling Vanilla Output ====="
 mv out/target/product/larry out/target/product/vanilla && \
 
 # --- Gapps Build ---
 echo "===== Setting up for Gapps Build ====="
-mv device/oneplus/larry/gapps.txt device/oneplus/larry/axion_larry.mk && \
+mv device/oneplus/larry/gapps.txt device/oneplus/larry/lunaris_larry.mk && \
 make installclean && \
 m bacon && \
-mv device/oneplus/larry/axion_larry.mk device/oneplus/larry/gapps.txt && \
+mv device/oneplus/larry/lunaris_larry.mk device/oneplus/larry/gapps.txt && \
 
 echo "===== Handling Gapps Output ====="
 mv out/target/product/larry out/target/product/gapps && \
 
 # --- Restore Vanilla ---
-mv device/oneplus/larry/vanilla.txt device/oneplus/larry/axion_larry.mk && \
+mv device/oneplus/larry/vanilla.txt device/oneplus/larry/lunaris_larry.mk && \
 
 echo "===== All builds completed successfully! ====="
