@@ -33,25 +33,25 @@ git clone https://github.com/LineageOS/android_hardware_oplus -b lineage-23.0 ha
 # --- Vanilla Build ---
 echo "===== Starting Vanilla Build ====="
 . build/envsetup.sh && \
-lunch lunaris_larry-userdebug && \
+lunch lineage_larry-userdebug && \
 make installclean && \
 m bacon && \
-mv device/oneplus/larry/lunaris_larry.mk device/oneplus/larry/vanilla.txt && \
+mv device/oneplus/larry/lineage_larry.mk device/oneplus/larry/vanilla.txt && \
 
 echo "===== Handling Vanilla Output ====="
 mv out/target/product/larry out/target/product/vanilla && \
 
 # --- Gapps Build ---
 echo "===== Setting up for Gapps Build ====="
-mv device/oneplus/larry/gapps.txt device/oneplus/larry/lunaris_larry.mk && \
+mv device/oneplus/larry/gapps.txt device/oneplus/larry/lineage_larry.mk && \
 make installclean && \
 m bacon && \
-mv device/oneplus/larry/lunaris_larry.mk device/oneplus/larry/gapps.txt && \
+mv device/oneplus/larry/lineage_larry.mk device/oneplus/larry/gapps.txt && \
 
 echo "===== Handling Gapps Output ====="
 mv out/target/product/larry out/target/product/gapps && \
 
 # --- Restore Vanilla ---
-mv device/oneplus/larry/vanilla.txt device/oneplus/larry/lunaris_larry.mk && \
+mv device/oneplus/larry/vanilla.txt device/oneplus/larry/lineage_larry.mk && \
 
 echo "===== All builds completed successfully! ====="
