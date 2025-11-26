@@ -1,61 +1,61 @@
-#!/usr/bin/env bash
-#
-# build_script.sh — Full auto dual build (Vanilla + GApps) for OnePlus Larry
-#
+#!/bin/bash
 
-set -euo pipefail
+# =============================
+#   InfinityX Build Script
+#   For: Vanilla + Gapps
+# =============================
 
-DEVICE="larry"
-TARGET="infinity_${DEVICE}-userdebug"
-OUT="out/target/product/${DEVICE}"
-JOBS="$(nproc || echo 8)"
-STAGE="${HOME}/Downloads"
 
-# 💾 Repo init + sync
-echo "🔄 Initializing repo..."
-repo init -u https://github.com/ProjectInfinity-X/manifest -b 16 --git-lfs
-/opt/crave/resync.sh
+# --- Init ROM repo ---
+repo init -u https://github.com/ProjectInfinity-X/manifest -b 16 --git-lfs && \
 
-# 📦 Clone trees
-echo "📂 Cloning device, vendor, kernel trees..."
-git clone https://github.com/imCrest/android_device_oneplus_larry -b infinityx device/oneplus/larry
-git clone https://github.com/anshedu/android_device_oneplus_sm6375-common -b infinityx16 device/oneplus/sm6375-common
-git clone https://github.com/anshedu/proprietary_vendor_oneplus_larry -b infinityx16 vendor/oneplus/larry
-git clone https://github.com/anshedu/proprietary_vendor_oneplus_sm6375-common -b infinityx16 vendor/oneplus/sm6375-common
-git clone https://github.com/imCrest/android_kernel_oneplus_sm6375 -b lineage-22.2 kernel/oneplus/sm6375
-git clone https://github.com/LineageOS/android_hardware_oplus -b lineage-23.0 hardware/oplus
+# --- Sync ROM ---
+/opt/crave/resync.sh && \
 
-# 🧠 Environment
-source build/envsetup.sh
-lunch "${TARGET}"
+# --- Clone Device Tree ---
+git clone https://github.com/anshedu/android_device_oneplus_larry -b lineage-22.2 device/oneplus/larry && \
 
-# ⚙️ Helper: clean + move zip
-function clean_and_stage() {
-  local tag="$1"
-  make installclean -j"${JOBS}"
-  rm -rf "${OUT}/obj/KERNEL_OBJ" 2>/dev/null || true
-  local z
-  z="$(ls -1t ${OUT}/*.zip 2>/dev/null | head -n1 || true)"
-  if [[ -n "$z" ]]; then
-    mkdir -p "${STAGE}"
-    cp -f "$z" "${STAGE}/$(basename "${z%.zip}")-${tag^^}.zip"
-    echo "✅ Copied: $(basename "${z%.zip}")-${tag^^}.zip"
-  fi
-}
+# --- Clone Common Device Tree ---
+git clone https://github.com/anshedu/android_device_oneplus_sm6375-common -b infinityx16 device/oneplus/sm6375-common && \
 
-# 🧱 VANILLA BUILD
-echo "⚙️ Building VANILLA (no GApps)..."
-export WITH_GMS=false
-export TARGET_GAPPS=false TARGET_INCLUDE_GOOGLE_APPS=false
-mka bacon -j"${JOBS}"
-clean_and_stage "vanilla"
+# --- Clone Vendor Tree ---
+git clone https://github.com/anshedu/proprietary_vendor_oneplus_larry -b lineage-23.0 vendor/oneplus/larry && \
 
-# 🧱 GAPPS BUILD
-echo "⚙️ Building GAPPS..."
-unset WITH_GMS TARGET_GAPPS TARGET_INCLUDE_GOOGLE_APPS
-mka bacon -j"${JOBS}"
-clean_and_stage "gapps"
+# --- Clone Common Vendor Tree ---
+git clone https://github.com/anshedu/proprietary_vendor_oneplus_sm6375-common -b lineage-23.0 vendor/oneplus/sm6375-common && \
 
-# ✅ Done
-echo "🎉 Builds finished successfully!"
-echo "📁 Check your ${STAGE} folder for both zips."
+# --- Clone Kernel Tree ---
+git clone https://github.com/anshedu/android_kernel_oneplus_sm6375 -b lineage-23.0 kernel/oneplus/sm6375 && \
+
+# --- Clone Hardware Tree ---
+git clone https://github.com/LineageOS/android_hardware_oplus -b lineage-23.0 hardware/oplus && \
+
+# =============================
+#  Build: Vanilla → Gapps
+# =============================
+
+# --- Vanilla Build ---
+echo "===== Starting Vanilla Build ====="
+. build/envsetup.sh && \
+lunch infinity_larry-userdebug && \
+make installclean && \
+m bacon && \
+mv device/oneplus/larry/infinity_larry.mk device/oneplus/larry/vanilla.txt && \
+
+echo "===== Handling Vanilla Output ====="
+mv out/target/product/larry out/target/product/vanilla && \
+
+# --- Gapps Build ---
+echo "===== Setting up for Gapps Build ====="
+mv device/oneplus/larry/gapps.txt device/oneplus/larry/infinity_larry.mk && \
+make installclean && \
+m bacon && \
+mv device/oneplus/larry/infinity_larry.mk device/oneplus/larry/gapps.txt && \
+
+echo "===== Handling Gapps Output ====="
+mv out/target/product/larry out/target/product/gapps && \
+
+# --- Restore Vanilla ---
+mv device/oneplus/larry/vanilla.txt device/oneplus/larry/infinity_larry.mk && \
+
+echo "===== All builds completed successfully! ====="
