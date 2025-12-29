@@ -1,61 +1,77 @@
 #!/bin/bash
+set -e
 
 # =============================
 #   InfinityX Build Script
-#   For: Vanilla + Gapps
+#   Repo v2.60+ Safe
+#   Vanilla + Gapps
 # =============================
 
+echo "===== Initializing Repo ====="
 
-# --- Init ROM repo ---
-repo init -u https://github.com/ProjectInfinity-X/manifest -b 16 --git-lfs && \
+repo init -u https://github.com/ProjectInfinity-X/manifest -b 16 --git-lfs
 
-# --- Sync ROM ---
-/opt/crave/resync.sh && \
+echo "===== Cleaning old repo state (hooks / dirty fixes) ====="
 
-# --- Clone Device Tree ---
-git clone https://github.com/imCrest/android_device_oneplus_larry -b infinityx device/oneplus/larry && \
+# Fix repo v2.60+ hook mismatch & dirty projects
+repo forall -c 'git reset --hard || true'
+repo forall -c 'git clean -fdx || true'
 
-# --- Clone Common Device Tree ---
-git clone https://github.com/imCrest/android_device_oneplus_sm6375-common1 -b lineage-23.0 device/oneplus/sm6375-common && \
+# Remove problematic prebuilts if partially synced
+rm -rf prebuilts/clang/host/linux-x86 || true
+rm -rf external/chromium-webview || true
 
-# --- Clone Vendor Tree ---
-git clone https://github.com/imCrest/proprietary_vendor_oneplus_larry -b lineage-23.0 vendor/oneplus/larry && \
+echo "===== Syncing ROM Source ====="
+/opt/crave/resync.sh
 
-# --- Clone Common Vendor Tree ---
-git clone https://github.com/imCrest/proprietary_vendor_oneplus_sm6375-common -b lineage-23.0 vendor/oneplus/sm6375-common && \
+echo "===== Cloning Device / Vendor / Kernel Trees ====="
 
-# --- Clone Kernel Tree ---
-git clone https://github.com/imCrest/android_kernel_oneplus_sm6375 -b lineage-23.0 kernel/oneplus/sm6375 && \
+# --- Device Tree ---
+git clone https://github.com/imCrest/android_device_oneplus_larry -b infinityx device/oneplus/larry
 
-# --- Clone Hardware Tree ---
-git clone https://github.com/LineageOS/android_hardware_oplus -b lineage-23.0 hardware/oplus && \
+# --- Common Device Tree ---
+git clone https://github.com/imCrest/android_device_oneplus_sm6375-common1 -b lineage-23.0 device/oneplus/sm6375-common
+
+# --- Vendor Tree ---
+git clone https://github.com/imCrest/proprietary_vendor_oneplus_larry -b lineage-23.0 vendor/oneplus/larry
+
+# --- Common Vendor Tree ---
+git clone https://github.com/imCrest/proprietary_vendor_oneplus_sm6375-common -b lineage-23.0 vendor/oneplus/sm6375-common
+
+# --- Kernel Tree ---
+git clone https://github.com/imCrest/android_kernel_oneplus_sm6375 -b lineage-23.0 kernel/oneplus/sm6375
+
+# --- Hardware Tree ---
+git clone https://github.com/LineageOS/android_hardware_oplus -b lineage-23.0 hardware/oplus
 
 # =============================
-#  Build: Vanilla → Gapps
+#  Build Section
 # =============================
 
-# --- Vanilla Build ---
-echo "===== Starting Vanilla Build ====="
-. build/envsetup.sh && \
-lunch infinity_larry-userdebug && \
-make installclean && \
-m bacon && \
-mv device/oneplus/larry/infinity_larry.mk device/oneplus/larry/vanilla.txt && \
+echo "===== Setting up build env ====="
+. build/envsetup.sh
+lunch infinity_larry-userdebug
 
-echo "===== Handling Vanilla Output ====="
-mv out/target/product/larry out/target/product/vanilla && \
+# ---------- VANILLA ----------
+echo "===== Starting VANILLA Build ====="
+make installclean
+m bacon
 
-# --- Gapps Build ---
-echo "===== Setting up for Gapps Build ====="
-mv device/oneplus/larry/gapps.txt device/oneplus/larry/infinity_larry.mk && \
-make installclean && \
-m bacon && \
-mv device/oneplus/larry/infinity_larry.mk device/oneplus/larry/gapps.txt && \
+echo "===== Saving Vanilla Output ====="
+mv device/oneplus/larry/infinity_larry.mk device/oneplus/larry/vanilla.txt
+mv out/target/product/larry out/target/product/vanilla
 
-echo "===== Handling Gapps Output ====="
-mv out/target/product/larry out/target/product/gapps && \
+# ---------- GAPPS ----------
+echo "===== Starting GAPPS Build ====="
+mv device/oneplus/larry/gapps.txt device/oneplus/larry/infinity_larry.mk
+make installclean
+m bacon
 
-# --- Restore Vanilla ---
-mv device/oneplus/larry/vanilla.txt device/oneplus/larry/infinity_larry.mk && \
+echo "===== Saving Gapps Output ====="
+mv out/target/product/larry out/target/product/gapps
+mv device/oneplus/larry/infinity_larry.mk device/oneplus/larry/gapps.txt
 
-echo "===== All builds completed successfully! ====="
+# ---------- RESTORE ----------
+mv device/oneplus/larry/vanilla.txt device/oneplus/larry/infinity_larry.mk
+
+echo "===== ALL BUILDS COMPLETED SUCCESSFULLY ====="
