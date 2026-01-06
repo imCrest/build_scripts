@@ -28,7 +28,7 @@ git clone https://github.com/imCrest/proprietary_vendor_oneplus_sm6375-common -b
 git clone https://github.com/imCrest/android_kernel_oneplus_sm6375 -b lineage-23.1 kernel/oneplus/sm6375 && \
 
 # --- Clone Hardware Tree ---
-git clone https://github.com/LineageOS/android_hardware_oplus -b lineage-23.2 hardware/oplus && \
+git clone https://github.com/imCrest/android_hardware_oplus -b lineage-23.2 hardware/oplus && \
 
 # =============================
 #  Build: Vanilla → Gapps
