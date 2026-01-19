@@ -13,7 +13,7 @@ repo init -u https://github.com/ProjectInfinity-X/manifest -b 16 --git-lfs && \
 /opt/crave/resync.sh && \
 
 # --- Clone Device Tree ---
-git clone https://github.com/imCrest/android_device_oneplus-larry -b infinityx device/oneplus/larry && \
+git clone https://github.com/imCrest/android_device_oneplus_larry -b infinityx device/oneplus/larry && \
 
 # --- Clone Common Device Tree ---
 git clone https://github.com/INXTEN/android_device_oneplus_sm6375-common -b lineage-23.1 device/oneplus/sm6375-common && \
