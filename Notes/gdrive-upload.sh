@@ -16,11 +16,17 @@ VANILLA_DIR="$BASE_DIR/vanilla"
 GAPPS_DIR="$BASE_DIR/gapps"
 
 if [ -d "$VANILLA_DIR" ]; then
-  rclone copy "$VANILLA_DIR" gdrive:InfinityX/larry/vanilla -P --retries 5
+  for zip in "$VANILLA_DIR"/*.zip; do
+    [ -e "$zip" ] || continue
+    rclone copy "$zip" gdrive:InfinityX/larry/vanilla -P --retries 5
+  done
 fi
 
 if [ -d "$GAPPS_DIR" ]; then
-  rclone copy "$GAPPS_DIR" gdrive:InfinityX/larry/gapps -P --retries 5
+  for zip in "$GAPPS_DIR"/*.zip; do
+    [ -e "$zip" ] || continue
+    rclone copy "$zip" gdrive:InfinityX/larry/gapps -P --retries 5
+  done
 fi
 
 echo "Upload done"
