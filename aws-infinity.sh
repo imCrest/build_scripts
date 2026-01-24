@@ -2,6 +2,8 @@
 set -e
 
 export TZ=Asia/Kolkata
+export REPO_COLOR=never
+export GIT_TERMINAL_PROMPT=0
 
 sudo apt update && sudo apt upgrade -y
 
@@ -10,8 +12,8 @@ git git-lfs curl wget unzip zip \
 bc bison build-essential \
 clang ccache flex g++-multilib gcc-multilib \
 gnupg gperf imagemagick \
-lib32ncurses5-dev lib32readline-dev lib32z1-dev \
-liblz4-tool libncurses5 libncurses5-dev \
+lib32readline-dev lib32z1-dev \
+liblz4-tool libncurses-dev libncurses6 \
 libsdl1.2-dev libssl-dev libxml2 libxml2-utils \
 lzop openjdk-17-jdk \
 python-is-python3 python3 python3-pip \
@@ -32,7 +34,7 @@ cd ~
 mkdir -p infinityx
 cd infinityx
 
-repo init -u https://github.com/ProjectInfinity-X/manifest -b 16 --git-lfs
+yes | repo init -u https://github.com/ProjectInfinity-X/manifest -b 16 --git-lfs
 
 SYNC_OK=0
 
@@ -75,3 +77,4 @@ mv out/target/product/larry out/target/product/gapps
 mv device/oneplus/larry/vanilla.txt device/oneplus/larry/infinity_larry.mk
 
 echo "BUILD DONE"
+
