@@ -19,16 +19,16 @@ git clone https://github.com/imCrest/android_device_oneplus_larry -b infinityx d
 git clone https://github.com/INXTEN/android_device_oneplus_sm6375-common -b lineage-23.1 device/oneplus/sm6375-common && \
 
 # --- Clone Vendor Tree ---
-git clone https://github.com/imCrest/proprietary_vendor_oneplus_larry -b lineage-23.1 vendor/oneplus/larry && \
+git clone https://github.com/imCrest/proprietary_vendor_oneplus_larry -b lineage-23.2 vendor/oneplus/larry && \
 
 # --- Clone Common Vendor Tree ---
-git clone https://github.com/imCrest/proprietary_vendor_oneplus_sm6375-common -b lineage-23.1 vendor/oneplus/sm6375-common && \
+git clone https://github.com/imCrest/proprietary_vendor_oneplus_sm6375-common -b lineage-23.2 vendor/oneplus/sm6375-common && \
 
 # --- Clone Kernel Tree ---
-git clone https://github.com/imCrest/android_kernel_oneplus_sm6375 -b lineage-23.1 kernel/oneplus/sm6375 && \
+git clone https://github.com/imCrest/android_kernel_oneplus_sm6375 -b lineage-23.2 kernel/oneplus/sm6375 && \
 
 # --- Clone Hardware Tree ---
-git clone https://github.com/imCrest/android_hardware_oplus -b lineage-23.1 hardware/oplus && \
+git clone https://github.com/imCrest/android_hardware_oplus -b lineage-23.2 hardware/oplus && \
 
 # =============================
 #  Build: Vanilla → Gapps
