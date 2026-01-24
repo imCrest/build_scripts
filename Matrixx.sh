@@ -16,7 +16,7 @@ repo init -u https://github.com/ProjectMatrixx/android.git -b 16.0 --git-lfs && 
 git clone https://github.com/imCrest/android_device_oneplus_larry -b matrixx device/oneplus/larry && \
 
 # --- Clone Common Device Tree ---
-git clone https://github.com/imCrest/android_device_oneplus_sm6375-common1 -b lineage-23.0 device/oneplus/sm6375-common && \
+git clone https://github.com/imCrest/android_device_oneplus_sm6375-common -b lineage-23.0 device/oneplus/sm6375-common && \
 
 # --- Clone Vendor Tree ---
 git clone https://github.com/imCrest/proprietary_vendor_oneplus_larry -b lineage-23.0 vendor/oneplus/larry && \
