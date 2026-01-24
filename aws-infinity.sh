@@ -75,8 +75,6 @@ git clone https://github.com/imCrest/proprietary_vendor_oneplus_sm6375-common -b
 git clone https://github.com/imCrest/android_kernel_oneplus_sm6375 -b lineage-23.1 kernel/oneplus/sm6375
 git clone https://github.com/imCrest/android_hardware_oplus -b lineage-23.1 hardware/oplus
 
-export SOONG_BUILD_NINJA_ARGS="-j6"
-
 source build/envsetup.sh
 lunch infinity_larry-userdebug
 
