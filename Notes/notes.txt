@@ -2,3 +2,6 @@ tmux new -s infinity
 curl -O https://raw.githubusercontent.com/imCrest/build_scripts/refs/heads/main/aws-infinity.sh
 chmod +x aws-infinity.sh
 ./aws-infinity.sh
+
+
+tmux attach -t infinity
