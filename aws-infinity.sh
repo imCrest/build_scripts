@@ -5,6 +5,22 @@ export TZ=Asia/Kolkata
 export REPO_COLOR=never
 export GIT_TERMINAL_PROMPT=0
 
+if ! swapon --show | grep -q "/swapfile"; then
+  sudo swapoff -a || true
+  sudo rm -f /swapfile
+
+  sudo fallocate -l 32G /swapfile
+  sudo chmod 600 /swapfile
+  sudo mkswap /swapfile
+  sudo swapon /swapfile
+
+  if ! grep -q "/swapfile" /etc/fstab; then
+    echo "/swapfile none swap sw 0 0" | sudo tee -a /etc/fstab
+  fi
+fi
+
+free -h
+
 sudo apt update && sudo apt upgrade -y
 
 sudo apt install -y \
@@ -59,6 +75,8 @@ git clone https://github.com/imCrest/proprietary_vendor_oneplus_sm6375-common -b
 git clone https://github.com/imCrest/android_kernel_oneplus_sm6375 -b lineage-23.1 kernel/oneplus/sm6375
 git clone https://github.com/imCrest/android_hardware_oplus -b lineage-23.1 hardware/oplus
 
+export SOONG_BUILD_NINJA_ARGS="-j6"
+
 source build/envsetup.sh
 lunch infinity_larry-userdebug
 
@@ -77,4 +95,3 @@ mv out/target/product/larry out/target/product/gapps
 mv device/oneplus/larry/vanilla.txt device/oneplus/larry/infinity_larry.mk
 
 echo "BUILD DONE"
-
