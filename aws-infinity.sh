@@ -12,23 +12,31 @@ if ! swapon --show | grep -q "/swapfile"; then
   sudo chmod 600 /swapfile
   sudo mkswap /swapfile
   sudo swapon /swapfile
-  if ! grep -q "/swapfile" /etc/fstab; then
-    printf "/swapfile none swap sw 0 0\n" | sudo tee -a /etc/fstab
-  fi
+  grep -q "/swapfile" /etc/fstab || printf "/swapfile none swap sw 0 0\n" | sudo tee -a /etc/fstab
 fi
 
 sudo apt update && sudo apt upgrade -y
-sudo apt install -y git git-lfs curl wget unzip zip \
+
+sudo apt install -y \
+git git-lfs curl wget unzip zip \
 bc bison build-essential clang ccache flex g++-multilib gcc-multilib \
-gnupg gperf imagemagick lib32readline-dev lib32z1-dev \
-liblz4-tool libncurses-dev libncurses6 libsdl1.2-dev libssl-dev \
-libxml2 libxml2-utils lzop openjdk-17-jdk python-is-python3 python3 python3-pip \
-rsync schedtool squashfs-tools xsltproc zlib1g-dev tmux rclone
+gnupg gperf imagemagick \
+lib32readline-dev lib32z1-dev liblz4-tool \
+libncurses-dev libncurses6 libsdl1.2-dev libssl-dev \
+libxml2 libxml2-utils lzop \
+openjdk-17-jdk \
+python-is-python3 python3 python3-pip \
+rsync schedtool squashfs-tools xsltproc zlib1g-dev \
+tmux rclone
 
 git lfs install
 
+export CCACHE_EXEC=$(which ccache)
+export USE_CCACHE=1
+ccache -M 100G
+
 mkdir -p ~/bin
-curl -s https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+curl -fsSL https://storage.googleapis.com/git-repo-downloads/repo -o ~/bin/repo
 chmod +x ~/bin/repo
 export PATH=~/bin:$PATH
 
@@ -36,19 +44,11 @@ cd ~
 mkdir -p infinityx
 cd infinityx
 
-yes | repo init -u https://github.com/ProjectInfinity-X/manifest -b 16 --git-lfs
+if [ ! -d .repo ]; then
+  yes | repo init -u https://github.com/ProjectInfinity-X/manifest -b 16 --git-lfs
+fi
 
-SYNC_OK=0
-repo sync -c --no-clone-bundle --optimized-fetch --prune --force-sync -j16 && SYNC_OK=1 || SYNC_OK=0
-if [ "$SYNC_OK" -ne 1 ]; then
-  repo sync -c --no-clone-bundle --optimized-fetch --prune --force-sync -j8 && SYNC_OK=1 || SYNC_OK=0
-fi
-if [ "$SYNC_OK" -ne 1 ]; then
-  repo sync -c --no-clone-bundle --optimized-fetch --prune --force-sync -j4 && SYNC_OK=1 || SYNC_OK=0
-fi
-if [ "$SYNC_OK" -ne 1 ]; then
-  repo sync -j1 --fail-fast
-fi
+repo sync -c --force-sync --no-clone-bundle --optimized-fetch -j$(nproc)
 
 [ -d device/oneplus/larry ] || git clone https://github.com/imCrest/android_device_oneplus_larry -b infinityx device/oneplus/larry
 [ -d device/oneplus/sm6375-common ] || git clone https://github.com/imCrest/android_device_oneplus_sm6375-common -b lineage-23.1 device/oneplus/sm6375-common
@@ -57,27 +57,42 @@ fi
 [ -d kernel/oneplus/sm6375 ] || git clone https://github.com/imCrest/android_kernel_oneplus_sm6375 -b lineage-23.1 kernel/oneplus/sm6375
 [ -d hardware/oplus ] || git clone https://github.com/imCrest/android_hardware_oplus -b lineage-23.1 hardware/oplus
 
-export WITH_GMS=true
-export TARGET_SUPPORTS_GAPPS=true
-export TARGET_SUPPORTS_GSUITE=true
-
-rm -rf out/soong out/target/product/larry
 source build/envsetup.sh
 lunch infinity_larry-userdebug
+
+export TARGET_BOOT_ANIMATION_RES=1080
+export INFINITY_MAINTAINER=SUJΛL
+export INFINITY_BUILD_TYPE=UNOFFICIAL
+export TARGET_SUPPORTS_BLUR=true
+export TARGET_FACE_UNLOCK_SUPPORTED=true
+
+export PRODUCT_PRODUCT_PROPERTIES+=" ro.product.marketname=OnePlus Nord CE 3 Lite"
+export PRODUCT_PRODUCT_PROPERTIES+=" ro.infinity.soc=Snapdragon 695 5G"
+export PRODUCT_PRODUCT_PROPERTIES+=" ro.infinity.battery=5000 mAh"
+export PRODUCT_PRODUCT_PROPERTIES+=" ro.infinity.display=1080 x 2400, 120 Hz"
+export PRODUCT_PRODUCT_PROPERTIES+=" ro.infinity.camera=108MP + 2MP + 2MP + 16MP"
+
+export WITH_GMS=true
+rm -rf out/target/product/larry
 mka bacon -j$(nproc)
 mv out/target/product/larry out/target/product/gapps
 
 export WITH_GMS=false
-export TARGET_SUPPORTS_GAPPS=false
-export TARGET_SUPPORTS_GSUITE=false
-
-rm -rf out/soong out/target/product/larry
-source build/envsetup.sh
-lunch infinity_larry-userdebug
+rm -rf out/target/product/larry
 mka bacon -j$(nproc)
 mv out/target/product/larry out/target/product/vanilla
 
-cd ~
-curl -fsSL https://raw.githubusercontent.com/imCrest/build_scripts/refs/heads/aws/Notes/gdrive-upload.sh -o gdrive-upload.sh
-chmod +x gdrive-upload.sh
-./gdrive-upload.sh
+API_KEY="09f8b105-5e37-4351-8024-fe610f788355"
+BASE="$HOME/infinityx/out/target/product"
+
+upload() {
+  [ -f "$1" ] && curl -T "$1" -u ":$API_KEY" https://pixeldrain.com/api/file/
+}
+
+for V in gapps vanilla; do
+  D="$BASE/$V"
+  upload "$D"/*.zip
+  upload "$D/boot.img"
+  upload "$D/vendor_boot.img"
+  upload "$D/dtbo.img"
+done
