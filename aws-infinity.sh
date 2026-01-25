@@ -5,36 +5,26 @@ export TZ=Asia/Kolkata
 export REPO_COLOR=never
 export GIT_TERMINAL_PROMPT=0
 
+# Swapfile setup
 if ! swapon --show | grep -q "/swapfile"; then
   sudo swapoff -a || true
   sudo rm -f /swapfile
-
   sudo fallocate -l 32G /swapfile
   sudo chmod 600 /swapfile
   sudo mkswap /swapfile
   sudo swapon /swapfile
-
   if ! grep -q "/swapfile" /etc/fstab; then
     echo "/swapfile none swap sw 0 0" | sudo tee -a /etc/fstab
   fi
 fi
 
-free -h
-
 sudo apt update && sudo apt upgrade -y
-
-sudo apt install -y \
-git git-lfs curl wget unzip zip \
-bc bison build-essential \
-clang ccache flex g++-multilib gcc-multilib \
-gnupg gperf imagemagick \
-lib32readline-dev lib32z1-dev \
-liblz4-tool libncurses-dev libncurses6 \
-libsdl1.2-dev libssl-dev libxml2 libxml2-utils \
-lzop openjdk-17-jdk \
-python-is-python3 python3 python3-pip \
-rsync schedtool squashfs-tools xsltproc \
-zlib1g-dev tmux
+sudo apt install -y git git-lfs curl wget unzip zip \
+  bc bison build-essential clang ccache flex g++-multilib gcc-multilib \
+  gnupg gperf imagemagick lib32readline-dev lib32z1-dev \
+  liblz4-tool libncurses-dev libncurses6 libsdl1.2-dev libssl-dev \
+  libxml2 libxml2-utils lzop openjdk-17-jdk python-is-python3 python3 python3-pip \
+  rsync schedtool squashfs-tools xsltproc zlib1g-dev tmux
 
 git lfs install
 
@@ -45,29 +35,26 @@ echo 'export PATH=~/bin:$PATH' >> ~/.bashrc
 export PATH=~/bin:$PATH
 
 repo --version
-
 cd ~
 mkdir -p infinityx
 cd infinityx
 
 yes | repo init -u https://github.com/ProjectInfinity-X/manifest -b 16 --git-lfs
 
+# Sync with fallback strategies
 SYNC_OK=0
-
 repo sync -c --no-clone-bundle --optimized-fetch --prune --force-sync -j16 && SYNC_OK=1 || SYNC_OK=0
-
 if [ "$SYNC_OK" -ne 1 ]; then
   repo sync -c --no-clone-bundle --optimized-fetch --prune --force-sync -j8 && SYNC_OK=1 || SYNC_OK=0
 fi
-
 if [ "$SYNC_OK" -ne 1 ]; then
   repo sync -c --no-clone-bundle --optimized-fetch --prune --force-sync -j4 && SYNC_OK=1 || SYNC_OK=0
 fi
-
 if [ "$SYNC_OK" -ne 1 ]; then
   repo sync -j1 --fail-fast
 fi
 
+# Clone device & vendor trees
 git clone https://github.com/imCrest/android_device_oneplus_larry -b infinityx device/oneplus/larry
 git clone https://github.com/imCrest/android_device_oneplus_sm6375-common -b lineage-23.1 device/oneplus/sm6375-common
 git clone https://github.com/imCrest/proprietary_vendor_oneplus_larry -b lineage-23.1 vendor/oneplus/larry
@@ -75,21 +62,32 @@ git clone https://github.com/imCrest/proprietary_vendor_oneplus_sm6375-common -b
 git clone https://github.com/imCrest/android_kernel_oneplus_sm6375 -b lineage-23.1 kernel/oneplus/sm6375
 git clone https://github.com/imCrest/android_hardware_oplus -b lineage-23.1 hardware/oplus
 
+# === FIRST BUILD: GAPPS ===
+export WITH_GMS=true
+export TARGET_SUPPORTS_GAPPS=true
+export TARGET_SUPPORTS_GSUITE=true
+
+rm -rf out/soong
+rm -rf out/target/product/larry
+
 source build/envsetup.sh
 lunch infinity_larry-userdebug
-
-make installclean
-mka bacon -j$(nproc)
-
-mv out/target/product/larry out/target/product/vanilla
-
-mv device/oneplus/larry/gapps.txt device/oneplus/larry/infinity_larry.mk
-
-make installclean
 mka bacon -j$(nproc)
 
 mv out/target/product/larry out/target/product/gapps
 
-mv device/oneplus/larry/vanilla.txt device/oneplus/larry/infinity_larry.mk
+# === SECOND BUILD: VANILLA ===
+export WITH_GMS=false
+export TARGET_SUPPORTS_GAPPS=false
+export TARGET_SUPPORTS_GSUITE=false
 
-echo "BUILD DONE"
+rm -rf out/soong
+rm -rf out/target/product/larry
+
+source build/envsetup.sh
+lunch infinity_larry-userdebug
+mka bacon -j$(nproc)
+
+mv out/target/product/larry out/target/product/vanilla
+
+
