@@ -1,32 +1,39 @@
 #!/bin/bash
 set -e
 
-export TZ=Asia/Kolkata
+apt update
+apt install -y rclone
 
-sudo apt update
-sudo apt install -y rclone
+mkdir -p ~/.config/rclone
+[ -f ~/.config/rclone/rclone.conf ] || cp rclone.conf ~/.config/rclone/rclone.conf
+[ -f ~/.config/rclone/sa.json ] || exit 1
 
-if ! rclone listremotes | grep -q "^gdrive:"; then
-  rclone config
-fi
+BASE=~/infinityx/out/target/product
+DATE=$(date +%Y-%m-%d)
+DEST="gdrive:InfinityX/larry/$DATE"
 
-BASE_DIR="$HOME/infinityx/out/target/product"
+rclone copy "$BASE/gapps" "$DEST/gapps" \
+  --filter "+ /*.zip" \
+  --filter "+ /boot.img" \
+  --filter "+ /vendor_boot.img" \
+  --filter "+ /dtbo.img" \
+  --filter "- *" \
+  --transfers 1 \
+  --checkers 1 \
+  --drive-chunk-size 64M \
+  --tpslimit 1 \
+  --bwlimit 6M \
+  -P
 
-VANILLA_DIR="$BASE_DIR/vanilla"
-GAPPS_DIR="$BASE_DIR/gapps"
-
-if [ -d "$VANILLA_DIR" ]; then
-  for zip in "$VANILLA_DIR"/*.zip; do
-    [ -e "$zip" ] || continue
-    rclone copy "$zip" gdrive:InfinityX/larry/vanilla -P --retries 5
-  done
-fi
-
-if [ -d "$GAPPS_DIR" ]; then
-  for zip in "$GAPPS_DIR"/*.zip; do
-    [ -e "$zip" ] || continue
-    rclone copy "$zip" gdrive:InfinityX/larry/gapps -P --retries 5
-  done
-fi
-
-echo "Upload done"
+rclone copy "$BASE/vanilla" "$DEST/vanilla" \
+  --filter "+ /*.zip" \
+  --filter "+ /boot.img" \
+  --filter "+ /vendor_boot.img" \
+  --filter "+ /dtbo.img" \
+  --filter "- *" \
+  --transfers 1 \
+  --checkers 1 \
+  --drive-chunk-size 64M \
+  --tpslimit 1 \
+  --bwlimit 6M \
+  -P
