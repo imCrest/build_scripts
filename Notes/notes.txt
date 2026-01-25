@@ -5,3 +5,9 @@ chmod +x aws-infinity.sh
 
 
 tmux attach -t infinity
+
+
+
+curl -O https://raw.githubusercontent.com/imCrest/build_scripts/refs/heads/aws/Notes/gdrive-upload.sh
+chmod +x gdrive-upload.sh
+./gdrive-upload.sh
