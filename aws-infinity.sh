@@ -78,6 +78,13 @@ mka bacon -j$(nproc)
 mv out/target/product/larry out/target/product/vanilla
 
 cd ~
-curl -fsSL https://raw.githubusercontent.com/imCrest/build_scripts/refs/heads/aws/Notes/gdrive-upload.sh -o gdrive-upload.sh
-chmod +x gdrive-upload.sh
-./gdrive-upload.sh
+
+PIXELDRAIN_KEY="09f8b105-5e37-4351-8024-fe610f788355"
+
+cd infinityx/out/target/product/gapps
+GAPPS_ZIP=$(ls *GAPPS*.zip)
+curl -T "$GAPPS_ZIP" -u :$PIXELDRAIN_KEY https://pixeldrain.com/api/file/
+
+cd ../vanilla
+VANILLA_ZIP=$(ls *VANILLA*.zip)
+curl -T "$VANILLA_ZIP" -u :$PIXELDRAIN_KEY https://pixeldrain.com/api/file/
