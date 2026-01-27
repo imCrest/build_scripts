@@ -6,21 +6,21 @@
 # =============================
 
 # --- Init ROM repo ---
-repo init -u https://github.com/ProjectInfinity-X/manifest -b 16 --git-lfs && \
+repo init --no-repo-verify --git-lfs -u https://github.com/ProjectInfinity-X/manifest -b 16-QPR2 -g default,-mips,-darwin,-notdefault && \
 # --- Sync ROM ---
 /opt/crave/resync.sh && \
 # --- Clone Device Tree ---
 git clone https://github.com/imCrest/android_device_oneplus_larry -b infinityx device/oneplus/larry && \
 # --- Clone Common Device Tree ---
-git clone https://github.com/imCrest/android_device_oneplus_sm6375-common -b lineage-23.1 device/oneplus/sm6375-common && \
+git clone https://github.com/imCrest/android_device_oneplus_sm6375-common -b lineage-23.2 device/oneplus/sm6375-common && \
 # --- Clone Vendor Tree ---
-git clone https://github.com/imCrest/proprietary_vendor_oneplus_larry -b lineage-23.1 vendor/oneplus/larry && \
+git clone https://github.com/imCrest/proprietary_vendor_oneplus_larry -b lineage-23.2 vendor/oneplus/larry && \
 # --- Clone Common Vendor Tree ---
-git clone https://github.com/imCrest/proprietary_vendor_oneplus_sm6375-common -b lineage-23.1 vendor/oneplus/sm6375-common && \
+git clone https://github.com/imCrest/proprietary_vendor_oneplus_sm6375-common -b lineage-23.2 vendor/oneplus/sm6375-common && \
 # --- Clone Kernel Tree ---
-git clone https://github.com/imCrest/android_kernel_oneplus_sm6375 -b lineage-23.1 kernel/oneplus/sm6375 && \
+git clone https://github.com/imCrest/android_kernel_oneplus_sm6375 -b lineage-23.2 kernel/oneplus/sm6375 && \
 # --- Clone Hardware Tree ---
-git clone https://github.com/imCrest/android_hardware_oplus -b lineage-23.1 hardware/oplus && \
+git clone https://github.com/imCrest/android_hardware_oplus -b lineage-23.2 hardware/oplus && \
 
 # =============================
 # Build: Gapps → Vanilla
