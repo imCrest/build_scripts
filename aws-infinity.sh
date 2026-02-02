@@ -6,7 +6,7 @@
 # =============================
 
 # --- Init ROM repo ---
-repo init --no-repo-verify --git-lfs -u https://github.com/ProjectInfinity-X/manifest -b 16-QPR2 -g default,-mips,-darwin,-notdefault && \
+repo init --no-repo-verify --git-lfs -u https://github.com/ProjectInfinity-X/manifest -b 16 -g default,-mips,-darwin,-notdefault && \
 # --- Sync ROM ---
 /opt/crave/resync.sh && \
 # --- Clone Device Tree ---
