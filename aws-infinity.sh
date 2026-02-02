@@ -36,7 +36,7 @@ cd ~
 mkdir -p infinityx
 cd infinityx
 
-yes | repo init --no-repo-verify --git-lfs -u https://github.com/ProjectInfinity-X/manifest -b 16-QPR2 -g default,-mips,-darwin,-notdefault
+yes | repo init --no-repo-verify --git-lfs -u https://github.com/ProjectInfinity-X/manifest -b 16 -g default,-mips,-darwin,-notdefault
 
 SYNC_OK=0
 repo sync -c --no-clone-bundle --optimized-fetch --prune --force-sync -j16 && SYNC_OK=1 || SYNC_OK=0
