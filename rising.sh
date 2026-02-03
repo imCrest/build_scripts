@@ -73,8 +73,7 @@ mka bacon -j16
 mv out/target/product/larry out/target/product/gapps
 
 export WITH_GMS=false
-export TARGET_SUPPORTS_GAPPS=false
-export TARGET_SUPPORTS_GSUITE=false
+export TARGET_USES_PICO_GAPPS=true
 
 source build/envsetup.sh
 lunch lineage_larry-userdebug
