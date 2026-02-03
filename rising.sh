@@ -57,6 +57,11 @@ fi
 [ -d kernel/oneplus/sm6375 ] || git clone https://github.com/imCrest/android_kernel_oneplus_sm6375 -b lineage-23.0 kernel/oneplus/sm6375
 [ -d hardware/oplus ] || git clone https://github.com/imCrest/android_hardware_oplus -b lineage-23.0 hardware/oplus
 
+export RISING_MAINTAINER="SUJAL"
+export RISING_CHIPSET="Snapdragon 695 5G"
+export TARGET_ENABLE_BLUR=true
+export PRODUCT_NO_CAMERA=false
+export TARGET_PREBUILT_LAWNCHAIR_LAUNCHER=false
 export WITH_GMS=true
 export TARGET_SUPPORTS_GAPPS=true
 export TARGET_SUPPORTS_GSUITE=true
