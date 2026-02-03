@@ -1,0 +1,5 @@
+tmux new -s rising
+curl -O https://raw.githubusercontent.com/imCrest/build_scripts/refs/heads/aws/rising.sh
+chmod +x rising.sh
+./rising.sh
+
