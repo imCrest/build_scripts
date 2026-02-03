@@ -55,7 +55,7 @@ fi
 [ -d vendor/oneplus/larry ] || git clone https://github.com/imCrest/proprietary_vendor_oneplus_larry -b lineage-23.0 vendor/oneplus/larry
 [ -d vendor/oneplus/sm6375-common ] || git clone https://github.com/imCrest/proprietary_vendor_oneplus_sm6375-common -b lineage-23.0 vendor/oneplus/sm6375-common
 [ -d kernel/oneplus/sm6375 ] || git clone https://github.com/imCrest/android_kernel_oneplus_sm6375 -b lineage-23.0 kernel/oneplus/sm6375
-[ -d hardware/oplus ] || git clone https://github.com/imCrest/android_hardware_oplus -b lineage-23.0 hardware/oplus
+[ -d hardware/oplus ] || git clone https://github.com/LineageOS/android_hardware_oplus -b lineage-23.0 hardware/oplus
 
 export RISING_MAINTAINER="SUJAL"
 export RISING_CHIPSET="Snapdragon 695 5G"
