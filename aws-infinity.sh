@@ -78,7 +78,7 @@ mka bacon -j16
 mv out/target/product/larry out/target/product/vanilla
 cd ~
 
-PIXELDRAIN_KEY="09f8b105-5e37-4351-8024-fe610f788355"
+PIXELDRAIN_KEY="f869dbb7-758e-4efa-9440-e1418b1c9916 "
 
 cd infinityx/out/target/product/gapps
 GAPPS_ZIP=$(ls *GAPPS*.zip)
