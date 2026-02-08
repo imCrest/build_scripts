@@ -55,7 +55,7 @@ fi
 [ -d hardware/oplus ] || git clone https://github.com/imCrest/android_hardware_oplus -b lineage-23.2 hardware/oplus
 
 export SOONG_UI_THREADS=16
-export NINJA_ARGS="-j24"
+export NINJA_ARGS="-j32"
 
 source build/envsetup.sh
 lunch infinity_larry-userdebug
@@ -65,7 +65,7 @@ export TARGET_SUPPORTS_GAPPS=false
 export TARGET_SUPPORTS_GSUITE=false
 
 mv device/oneplus/larry/infinity_larry.mk device/oneplus/larry/vanilla.txt
-mka bacon -j24
+mka bacon -j32
 mv out/target/product/larry out/target/product/vanilla
 
 mv device/oneplus/larry/gapps.txt device/oneplus/larry/infinity_larry.mk
@@ -74,7 +74,7 @@ export WITH_GMS=true
 export TARGET_SUPPORTS_GAPPS=true
 export TARGET_SUPPORTS_GSUITE=true
 
-mka bacon -j24
+mka bacon -j32
 mv out/target/product/larry out/target/product/gapps
 
 mv device/oneplus/larry/vanilla.txt device/oneplus/larry/infinity_larry.mk
