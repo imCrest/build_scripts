@@ -34,7 +34,18 @@ mkdir -p infinityx
 cd infinityx
 
 yes | repo init --git-lfs -u https://github.com/ProjectInfinity-X/manifest -b 16
-repo sync -c --no-clone-bundle --optimized-fetch --prune --force-sync -j24
+SYNC_OK=0
+repo sync -c --no-clone-bundle --optimized-fetch --prune --force-sync -j16 && SYNC_OK=1 || SYNC_OK=0
+if [ "$SYNC_OK" -ne 1 ]; then
+  repo sync -c --no-clone-bundle --optimized-fetch --prune --force-sync -j8 && SYNC_OK=1 || SYNC_OK=0
+fi
+if [ "$SYNC_OK" -ne 1 ]; then
+  repo sync -c --no-clone-bundle --optimized-fetch --prune --force-sync -j4 && SYNC_OK=1 || SYNC_OK=0
+fi
+if [ "$SYNC_OK" -ne 1 ]; then
+  repo sync -j1 --fail-fast
+fi
+
 
 [ -d device/oneplus/larry ] || git clone https://github.com/imCrest/android_device_oneplus_larry -b infinityx device/oneplus/larry
 [ -d device/oneplus/sm6375-common ] || git clone https://github.com/imCrest/android_device_oneplus_sm6375-common -b lineage-23.2 device/oneplus/sm6375-common
