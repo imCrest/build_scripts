@@ -26,3 +26,10 @@ lunch infinity_larry-userdebug && \
 make installclean && \
 mka bacon -j$(nproc) && \
 mv out/target/product/larry out/target/product/vanilla
+PIXELDRAIN_KEY="f869dbb7-758e-4efa-9440-e1418b1c9916"
+
+cd out/target/product/gapps
+curl -T *.zip -u :$PIXELDRAIN_KEY https://pixeldrain.com/api/file/
+
+cd ../vanilla
+curl -T *.zip -u :$PIXELDRAIN_KEY https://pixeldrain.com/api/file/
