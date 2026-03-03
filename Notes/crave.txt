@@ -1,0 +1,3 @@
+crave clone create --projectID 35 /crave-devspaces/infinityx
+
+crave run --no-patch -- "curl https://raw.githubusercontent.com/imCrest/build_scripts/refs/heads/Aws1/InfinityX.sh | bash"
