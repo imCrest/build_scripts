@@ -1,54 +1,98 @@
-PIXELDRAIN_KEY="f869dbb7-758e-4efa-9440-e1418b1c9916"
+#!/bin/bash
 
+repo init --no-repo-verify --git-lfs -u https://github.com/ProjectInfinity-X/manifest -b 16 -g default,-mips,-darwin,-notdefault && \
+/opt/crave/resync.sh && \
+git clone https://github.com/imCrest/android_device_oneplus_larry -b infinityx device/oneplus/larry && \
+git clone https://github.com/imCrest/android_device_oneplus_sm6375-common -b lineage-23.2 device/oneplus/sm6375-common && \
+git clone https://github.com/imCrest/proprietary_vendor_oneplus_larry -b lineage-23.2 vendor/oneplus/larry && \
+git clone https://github.com/imCrest/proprietary_vendor_oneplus_sm6375-common -b lineage-23.2 vendor/oneplus/sm6375-common && \
+git clone https://github.com/imCrest/android_kernel_oneplus_sm6375 -b lineage-23.2 kernel/oneplus/sm6375 && \
+git clone https://github.com/imCrest/android_hardware_oplus -b lineage-23.2 hardware/oplus && \
+
+export WITH_GMS=true && \
+export TARGET_SUPPORTS_GAPPS=true && \
+export TARGET_SUPPORTS_GSUITE=true && \
+source build/envsetup.sh && \
+lunch infinity_larry-userdebug && \
+make installclean && \
+mka bacon -j$(nproc) && \
+mv out/target/product/larry out/target/product/gapps && \
+
+export WITH_GMS=false && \
+export TARGET_SUPPORTS_GAPPS=false && \
+export TARGET_SUPPORTS_GSUITE=false && \
+source build/envsetup.sh && \
+lunch infinity_larry-userdebug && \
+make installclean && \
+mka bacon -j$(nproc) && \
+mv out/target/product/larry out/target/product/vanilla
+
+PIXELDRAIN_KEY="f869dbb7-758e-4efa-9440-e1418b1c9916"
 TELEGRAM_TOKEN="8172049270:AAGg1I0ah8CNV0PwtNg9cTz6AidYQLR4WQw"
 CHAT_ID="7911062735"
 
 upload_and_get_link () {
-
-FILE=$1
-
-echo "Uploading $FILE ..."
-
-RESPONSE=$(curl -s -T "$FILE" -u :$PIXELDRAIN_KEY https://pixeldrain.com/api/file/)
-
-echo "$RESPONSE"
-
-ID=$(echo "$RESPONSE" | sed -n 's/.*"id":"([^"]*)".*/\1/p')
-
-LINK="https://pixeldrain.com/u/$ID"
-
-echo "$LINK"
+    FILE=$1
+    if [ ! -f "$FILE" ]; then
+        echo "#"
+        return 1
+    fi
+    RESPONSE=$(curl -s -T "$FILE" -u :$PIXELDRAIN_KEY https://pixeldrain.com/api/file/)
+    ID=$(echo "$RESPONSE" | sed -n 's/.*"id":"\([^"]*\)".*/\1/p')
+    if [ -n "$ID" ]; then
+        echo "https://pixeldrain.com/u/$ID"
+    else
+        echo "#"
+    fi
 }
 
-cd out/target/product/gapps
+if cd out/target/product/gapps; then
+    ROM_GAPPS=$(upload_and_get_link *.zip)
+    BOOT=$(upload_and_get_link boot.img)
+    VENDOR_BOOT=$(upload_and_get_link vendor_boot.img)
+    DTBO=$(upload_and_get_link dtbo.img)
+    cd ../../../.. 
+else
+    exit 1
+fi
 
-ROM_GAPPS=$(upload_and_get_link *.zip)
-BOOT=$(upload_and_get_link boot.img)
-VENDOR_BOOT=$(upload_and_get_link vendor_boot.img)
-DTBO=$(upload_and_get_link dtbo.img)
+if cd out/target/product/vanilla; then
+    ROM_VANILLA=$(upload_and_get_link *.zip)
+    cd ../../../.. 
+else
+    exit 1
+fi
 
-cd ../vanilla
+DATE=$(date +'%d/%B/%Y')
 
-ROM_VANILLA=$(upload_and_get_link *.zip)
+MESSAGE="Project Infinity X (Unofficial) | Android 16 (QPR-2)
+Updated: $DATE
 
-MESSAGE="✅ Infinity-X Build Complete
+Maintainer ~ SUJΛL
 
-📦 GApps ROM
-$ROM_GAPPS
+<a href=\"YOUR_NOTE_LINK_HERE\">Before Flashing Any Rom Read This Note First</a>
 
-📦 Vanilla ROM
-$ROM_VANILLA
+Gapps > <a href=\"$ROM_GAPPS\">DOWNLOAD</a>
 
-⚙ boot.img
-$BOOT
+Vanilla > <a href=\"$ROM_VANILLA\">DOWNLOAD</a>
 
-⚙ vendor_boot.img
-$VENDOR_BOOT
+3.8V Changelogs - <a href=\"YOUR_CHANGELOG_LINK_HERE\">HERE</a>
+Rom Screenshot - <a href=\"YOUR_SCREENSHOT_LINK_HERE\">HERE</a>
+Flashing Steps - <a href=\"YOUR_FLASHING_STEPS_LINK_HERE\">HERE</a>
 
-⚙ dtbo.img
-$DTBO
-"
+Notes:
+<blockquote>1. Dirty Flash will be fine if you using 3.6 or 3.7 Build</blockquote>
 
-curl -s -X POST https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage 
--d chat_id=$CHAT_ID 
--d text="$MESSAGE"
+<blockquote>2. Here (Gapps)  <a href=\"$BOOT\">Boot.img</a>  <a href=\"$VENDOR_BOOT\">Vendor_boot.img</a>  <a href=\"$DTBO\">dtbo.img</a></blockquote>
+
+<blockquote>3. If you have any query related to the device then please ask in the community, Please Don't DM Me</blockquote>
+
+If you want more updates in the future nd <a href=\"YOUR_DONATE_LINK_HERE\">Donate</a> only if you feel I deserve it (Optional)
+
+Enjoy.."
+
+curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage" \
+-d chat_id="$CHAT_ID" \
+-d parse_mode="HTML" \
+-d disable_web_page_preview="true" \
+-d text="$MESSAGE" > /dev/null
