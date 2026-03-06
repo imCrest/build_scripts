@@ -47,6 +47,13 @@ upload_and_get_link () {
 }
 
 if cd out/target/product/gapps; then
+    ZIP_FILE=$(ls *.zip | head -n 1)
+    ROM_VERSION=$(echo "$ZIP_FILE" | cut -d'-' -f3)
+    if [ -z "$ROM_VERSION" ]; then ROM_VERSION="3.8"; fi
+    
+    PREV_VER1=$(awk "BEGIN {printf \"%.1f\", $ROM_VERSION - 0.2}")
+    PREV_VER2=$(awk "BEGIN {printf \"%.1f\", $ROM_VERSION - 0.1}")
+
     ROM_GAPPS=$(upload_and_get_link *.zip)
     BOOT=$(upload_and_get_link boot.img)
     VENDOR_BOOT=$(upload_and_get_link vendor_boot.img)
@@ -76,12 +83,12 @@ Gapps > <a href=\"$ROM_GAPPS\">DOWNLOAD</a>
 
 Vanilla > <a href=\"$ROM_VANILLA\">DOWNLOAD</a>
 
-3.8V Changelogs - <a href=\"YOUR_CHANGELOG_LINK_HERE\">HERE</a>
+${ROM_VERSION}V Changelogs - <a href=\"YOUR_CHANGELOG_LINK_HERE\">HERE</a>
 Rom Screenshot - <a href=\"https://t.me/ProjectInfinityX/1697?single\">HERE</a>
 Flashing Steps - <a href=\"https://youtu.be/vs2y1MAVWO0?si=FLFk-Igi1Be01SVo\">HERE</a>
 
 Notes:
-<blockquote>1. Dirty Flash will be fine if you using 3.6 or 3.7 Build</blockquote>
+<blockquote>1. Dirty Flash will be fine if you using ${PREV_VER1} or ${PREV_VER2} Build</blockquote>
 
 <blockquote>2. Here (Gapps)  <a href=\"$BOOT\">Boot.img</a>  <a href=\"$VENDOR_BOOT\">Vendor_boot.img</a>  <a href=\"$DTBO\">dtbo.img</a></blockquote>
 
