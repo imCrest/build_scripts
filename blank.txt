@@ -27,8 +27,8 @@ make installclean && \
 mka bacon -j$(nproc) && \
 mv out/target/product/larry out/target/product/vanilla
 
-PIXELDRAIN_KEY="f869dbb7-758e-4efa-9440-e1418b1c9916"
-TELEGRAM_TOKEN="8172049270:AAGg1I0ah8CNV0PwtNg9cTz6AidYQLR4WQw"
+PIXELDRAIN_KEY="f7f10e6d-738f-481a-91d2-688d195e3291"
+TELEGRAM_TOKEN="8596813535:AAE79BjYLWnPsTSy1AfVOvkh4OYMelt9QGc"
 CHAT_ID="7911062735"
 
 upload_and_get_link () {
@@ -65,20 +65,20 @@ fi
 
 DATE=$(date +'%d/%B/%Y')
 
-MESSAGE="Project Infinity X (Unofficial) | Android 16 (QPR-2)
-Updated: $DATE
+MESSAGE="<b>Project Infinity X (Unofficial) | Android 16 (QPR-2)</b>
+<b>Updated: $DATE</b>
 
-Maintainer ~ SUJΛL
+<b>Maintainer</b> ~ <a href=\"tg://openmessage?user_id=7911062735\">SUJΛL</a>
 
-<a href=\"YOUR_NOTE_LINK_HERE\">Before Flashing Any Rom Read This Note First</a>
+<tg-spoiler><a href=\"https://t.me/OnePlusNordCE3Lite/125856\">Before Flashing Any Rom Read This Note First</a></tg-spoiler>
 
 Gapps > <a href=\"$ROM_GAPPS\">DOWNLOAD</a>
 
 Vanilla > <a href=\"$ROM_VANILLA\">DOWNLOAD</a>
 
 3.8V Changelogs - <a href=\"YOUR_CHANGELOG_LINK_HERE\">HERE</a>
-Rom Screenshot - <a href=\"YOUR_SCREENSHOT_LINK_HERE\">HERE</a>
-Flashing Steps - <a href=\"YOUR_FLASHING_STEPS_LINK_HERE\">HERE</a>
+Rom Screenshot - <a href=\"https://t.me/ProjectInfinityX/1697?single\">HERE</a>
+Flashing Steps - <a href=\"https://youtu.be/vs2y1MAVWO0?si=FLFk-Igi1Be01SVo\">HERE</a>
 
 Notes:
 <blockquote>1. Dirty Flash will be fine if you using 3.6 or 3.7 Build</blockquote>
@@ -87,7 +87,7 @@ Notes:
 
 <blockquote>3. If you have any query related to the device then please ask in the community, Please Don't DM Me</blockquote>
 
-If you want more updates in the future nd <a href=\"YOUR_DONATE_LINK_HERE\">Donate</a> only if you feel I deserve it (Optional)
+If you want more updates in the future nd <a href=\"https://t.me/Sujxlsahu?text=I%20want%20to%20donate%20to%20you\">Donate</a> only if you feel I deserve it (Optional)
 
 Enjoy.."
 
