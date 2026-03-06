@@ -1,0 +1,54 @@
+PIXELDRAIN_KEY="f869dbb7-758e-4efa-9440-e1418b1c9916"
+
+TELEGRAM_TOKEN="8172049270:AAGg1I0ah8CNV0PwtNg9cTz6AidYQLR4WQw"
+CHAT_ID="7911062735"
+
+upload_and_get_link () {
+
+FILE=$1
+
+echo "Uploading $FILE ..."
+
+RESPONSE=$(curl -s -T "$FILE" -u :$PIXELDRAIN_KEY https://pixeldrain.com/api/file/)
+
+echo "$RESPONSE"
+
+ID=$(echo "$RESPONSE" | sed -n 's/.*"id":"([^"]*)".*/\1/p')
+
+LINK="https://pixeldrain.com/u/$ID"
+
+echo "$LINK"
+}
+
+cd out/target/product/gapps
+
+ROM_GAPPS=$(upload_and_get_link *.zip)
+BOOT=$(upload_and_get_link boot.img)
+VENDOR_BOOT=$(upload_and_get_link vendor_boot.img)
+DTBO=$(upload_and_get_link dtbo.img)
+
+cd ../vanilla
+
+ROM_VANILLA=$(upload_and_get_link *.zip)
+
+MESSAGE="✅ Infinity-X Build Complete
+
+📦 GApps ROM
+$ROM_GAPPS
+
+📦 Vanilla ROM
+$ROM_VANILLA
+
+⚙ boot.img
+$BOOT
+
+⚙ vendor_boot.img
+$VENDOR_BOOT
+
+⚙ dtbo.img
+$DTBO
+"
+
+curl -s -X POST https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage 
+-d chat_id=$CHAT_ID 
+-d text="$MESSAGE"
