@@ -1,5 +1,7 @@
 #!/bin/bash
-
+crave clone destroy -y /crave-devspaces/infinityx
+crave clone create --projectID 35 /crave-devspaces/infinityx
+cd /crave-devspaces/infinityx
 repo init --no-repo-verify --git-lfs -u https://github.com/ProjectInfinity-X/manifest -b 16 -g default,-mips,-darwin,-notdefault && \
 /opt/crave/resync.sh && \
 git clone https://github.com/imCrest/android_device_oneplus_larry -b infinityx device/oneplus/larry && \
