@@ -11,14 +11,14 @@ git clone https://github.com/imCrest/proprietary_vendor_oneplus_sm6375-common -b
 git clone https://github.com/imCrest/android_kernel_oneplus_sm6375 -b lineage-23.2 kernel/oneplus/sm6375 && \
 git clone https://github.com/imCrest/android_hardware_oplus -b lineage-23.2 hardware/oplus && \
 
-export WITH_GMS=true && \
-export TARGET_SUPPORTS_GAPPS=true && \
-export TARGET_SUPPORTS_GSUITE=true && \
+export WITH_GMS=false && \
+export TARGET_SUPPORTS_GAPPS=false && \
+export TARGET_SUPPORTS_GSUITE=false && \
 source build/envsetup.sh && \
 lunch infinity_larry-userdebug && \
 make installclean && \
 mka bacon -j$(nproc) && \
-mv out/target/product/larry out/target/product/gapps
+mv out/target/product/larry out/target/product/vanilla
 
 PIXELDRAIN_KEY="f869dbb7-758e-4efa-9440-e1418b1c9916"
 TELEGRAM_TOKEN="8172049270:AAGg1I0ah8CNV0PwtNg9cTz6AidYQLR4WQw"
@@ -39,7 +39,7 @@ upload_and_get_link () {
     fi
 }
 
-if cd out/target/product/gapps; then
+if cd out/target/product/vanilla; then
     ZIP_FILE=$(ls *.zip | head -n 1)
     ROM_VERSION=$(echo "$ZIP_FILE" | cut -d'-' -f3)
     if [ -z "$ROM_VERSION" ]; then ROM_VERSION="3.8"; fi
@@ -47,7 +47,7 @@ if cd out/target/product/gapps; then
     PREV_VER1=$(awk "BEGIN {printf \"%.1f\", $ROM_VERSION - 0.2}")
     PREV_VER2=$(awk "BEGIN {printf \"%.1f\", $ROM_VERSION - 0.1}")
 
-    ROM_GAPPS=$(upload_and_get_link *.zip)
+    ROM_VANILLA=$(upload_and_get_link *.zip)
     BOOT=$(upload_and_get_link boot.img)
     VENDOR_BOOT=$(upload_and_get_link vendor_boot.img)
     DTBO=$(upload_and_get_link dtbo.img)
@@ -65,7 +65,7 @@ MESSAGE="<b>Project Infinity X (Unofficial) | Android 16 (QPR-2)</b>
 
 <tg-spoiler><a href=\"https://t.me/OnePlusNordCE3Lite/125856\">Before Flashing Any Rom Read This Note First</a></tg-spoiler>
 
-Gapps > <a href=\"$ROM_GAPPS\">DOWNLOAD</a>
+Vanilla > <a href=\"$ROM_VANILLA\">DOWNLOAD</a>
 
 ${ROM_VERSION}V Changelogs - <a href=\"YOUR_CHANGELOG_LINK_HERE\">HERE</a>
 Rom Screenshot - <a href=\"https://t.me/ProjectInfinityX/1697?single\">HERE</a>
@@ -74,7 +74,7 @@ Flashing Steps - <a href=\"https://youtu.be/vs2y1MAVWO0?si=FLFk-Igi1Be01SVo\">HE
 Notes:
 <blockquote>1. Dirty Flash will be fine if you using ${PREV_VER1} or ${PREV_VER2} Build</blockquote>
 
-<blockquote>2. Here (Gapps)  <a href=\"$BOOT\">Boot.img</a>  <a href=\"$VENDOR_BOOT\">Vendor_boot.img</a>  <a href=\"$DTBO\">dtbo.img</a></blockquote>
+<blockquote>2. Here (Vanilla)  <a href=\"$BOOT\">Boot.img</a>  <a href=\"$VENDOR_BOOT\">Vendor_boot.img</a>  <a href=\"$DTBO\">dtbo.img</a></blockquote>
 
 <blockquote>3. If you have any query related to the device then please ask in the community, Please Don't DM Me</blockquote>
 
