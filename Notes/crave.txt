@@ -1,3 +1,9 @@
 crave clone create --projectID 35 /crave-devspaces/
 
-crave run --no-patch -- "curl https://raw.githubusercontent.com/imCrest/build_scripts/refs/heads/crave/InfinityX.sh | bash"
+gapps + vanilla crave run --no-patch -- "curl https://raw.githubusercontent.com/imCrest/build_scripts/refs/heads/crave/InfinityX.sh | bash"
+
+gapps crave run --no-patch -- "curl https://raw.githubusercontent.com/imCrest/build_scripts/refs/heads/gapps/InfinityX.sh | bash"
+
+vanilla crave run --no-patch -- "curl https://raw.githubusercontent.com/imCrest/build_scripts/refs/heads/vanilla/InfinityX.sh | bash"
+
+
