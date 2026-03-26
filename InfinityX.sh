@@ -1,5 +1,4 @@
 #!/bin/bash
-cd ..
 crave clone destroy -y /crave-devspaces/infinityx
 crave clone create --projectID 35 /crave-devspaces/infinityx
 cd /crave-devspaces/infinityx
