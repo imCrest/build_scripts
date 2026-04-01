@@ -18,16 +18,7 @@ source build/envsetup.sh && \
 lunch infinity_larry-userdebug && \
 make installclean && \
 mka bacon -j$(nproc) && \
-mv out/target/product/larry out/target/product/gapps && \
-
-export WITH_GMS=false && \
-export TARGET_SUPPORTS_GAPPS=false && \
-export TARGET_SUPPORTS_GSUITE=false && \
-source build/envsetup.sh && \
-lunch infinity_larry-userdebug && \
-make installclean && \
-mka bacon -j$(nproc) && \
-mv out/target/product/larry out/target/product/vanilla
+mv out/target/product/larry out/target/product/gapps
 
 PIXELDRAIN_KEY="f869dbb7-758e-4efa-9440-e1418b1c9916"
 TELEGRAM_TOKEN="8172049270:AAGg1I0ah8CNV0PwtNg9cTz6AidYQLR4WQw"
@@ -65,13 +56,6 @@ else
     exit 1
 fi
 
-if cd out/target/product/vanilla; then
-    ROM_VANILLA=$(upload_and_get_link *.zip)
-    cd ../../../.. 
-else
-    exit 1
-fi
-
 DATE=$(date +'%d/%B/%Y')
 
 MESSAGE="<b>Project Infinity X (Unofficial) | Android 16 (QPR-2)</b>
@@ -82,8 +66,6 @@ MESSAGE="<b>Project Infinity X (Unofficial) | Android 16 (QPR-2)</b>
 <tg-spoiler><a href=\"https://t.me/OnePlusNordCE3Lite/125856\">Before Flashing Any Rom Read This Note First</a></tg-spoiler>
 
 Gapps > <a href=\"$ROM_GAPPS\">DOWNLOAD</a>
-
-Vanilla > <a href=\"$ROM_VANILLA\">DOWNLOAD</a>
 
 ${ROM_VERSION}V Changelogs - <a href=\"YOUR_CHANGELOG_LINK_HERE\">HERE</a>
 Rom Screenshot - <a href=\"https://t.me/ProjectInfinityX/1697?single\">HERE</a>
