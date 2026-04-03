@@ -1,7 +1,7 @@
 #!/bin/bash
 
 rm -rf .repo
-rm -rf out
+rm -rf out/target/product/larry
 rm -rf device/oneplus/larry
 rm -rf device/oneplus/sm6375-common
 rm -rf vendor/oneplus/larry
