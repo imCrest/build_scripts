@@ -25,7 +25,8 @@ source build/envsetup.sh
 lunch infinity_larry-userdebug
 make installclean
 mka bacon -j$(nproc)
-mv out/target/product/larry out/target/product/gappsPIXELDRAIN_KEY="f869dbb7-758e-4efa-9440-e1418b1c9916"
+mv out/target/product/larry out/target/product/gapps
+PIXELDRAIN_KEY="f869dbb7-758e-4efa-9440-e1418b1c9916"
 TELEGRAM_TOKEN="8172049270:AAGg1I0ah8CNV0PwtNg9cTz6AidYQLR4WQw"
 CHAT_ID="7911062735"
 
