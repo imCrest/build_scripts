@@ -1,10 +1,19 @@
 #!/bin/bash
 
+rm -rf .repo
+rm -rf out/target/product/larry
+rm -rf device/oneplus/larry
+rm -rf device/oneplus/sm6375-common
+rm -rf vendor/oneplus/larry
+rm -rf vendor/oneplus/sm6375-common
+rm -rf kernel/oneplus/sm6375
+rm -rf hardware/oplus
+
 repo init --no-repo-verify --git-lfs -u https://github.com/ProjectInfinity-X/manifest -b 16 -g default,-mips,-darwin,-notdefault && \
 /opt/crave/resync.sh && \
 git clone https://github.com/imCrest/android_device_oneplus_larry -b infinityx device/oneplus/larry && \
 git clone https://github.com/imCrest/android_device_oneplus_sm6375-common -b lineage-23.2 device/oneplus/sm6375-common && \
-git clone https://github.com/imCrest/proprietary_vendor_oneplus_larry -b lineage-23.2 vendor/oneplus/larry && \
+git clone https://github.com/imCrest/proprietary_vendor_oneplus_larry -b lineage-23.2-arb vendor/oneplus/larry && \
 git clone https://github.com/imCrest/proprietary_vendor_oneplus_sm6375-common -b lineage-23.2 vendor/oneplus/sm6375-common && \
 git clone https://github.com/imCrest/android_kernel_oneplus_sm6375 -b lineage-23.2 kernel/oneplus/sm6375 && \
 git clone https://github.com/imCrest/android_hardware_oplus -b lineage-23.2 hardware/oplus && \
@@ -77,7 +86,7 @@ MESSAGE="<b>Project Infinity X (Unofficial) | Android 16 (QPR-2)</b>
 
 <b>Maintainer</b> ~ <a href=\"tg://openmessage?user_id=7911062735\">SUJΛL</a>
 
-<tg-spoiler><a href=\"https://t.me/OnePlusNordCE3Lite/125856\">Before Flashing Any Rom Read This Note First</a></tg-spoiler>
+<tg-spoiler><b>⚠️ Note: This build is ARB (Anti Roll Back)</b></tg-spoiler>
 
 Gapps > <a href=\"$ROM_GAPPS\">DOWNLOAD</a>
 
