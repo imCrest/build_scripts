@@ -47,7 +47,7 @@ PD_VANILLA_ID=$(upload_to_pd "out/target/product/vanilla/"*.zip)
 PD_GAPPS_LINK="https://pixeldrain.com/u/$PD_GAPPS_ID"
 PD_VANILLA_LINK="https://pixeldrain.com/u/$PD_VANILLA_ID"
 
-RELEASE_NOTES="PLEASE ANYONE ON THE LATEST 1600 FIRMWARE OR 1301 FIRMWARE, DO NOT FLASH THIS CUSTOM ROM, IT CAUSES HARD BRICKS STILL, MANY PEOPLE LIKE ME HAVE ENCOUNTERED ISSUES LIKE HARD BRICKS.
+RELEASE_NOTES="PLEASE ANYONE ON THE LATEST 1600 FIRMWARE OR 1301 FIRMWARE, DO NOT FLASH THIS CUSTOM ROM, IT CAUSES HARD BRICKS STILL, MANY PEOPLE  HAVE ENCOUNTERED ISSUES LIKE HARD BRICKS.
 
 1. These firmwares have triggered ARB (Anti Roll Back Fuse), which prevents to go back to any firmware.
 2. Do not flash custom roms on these firmwares and come to us, it will be your fault, if you do so.
