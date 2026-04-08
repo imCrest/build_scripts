@@ -1,7 +1,7 @@
 tmux new -s infinity
 curl -O https://raw.githubusercontent.com/imCrest/build_scripts/refs/heads/upload/PixelDrain%2BGh.sh
-chmod +x PixelDrain+Gh.sh
-./PixelDrain+Gh.sh
+chmod +x PixelDrain%2BGh.sh
+./PixelDrain%2BGh.sh
 
 
 tmux attach -t infinity
