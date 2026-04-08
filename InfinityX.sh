@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sudo apt-get update && sudo apt-get install gh -y
+
 rm -rf .repo/local_manifests out/target/product/larry device/oneplus/larry device/oneplus/sm6375-common vendor/oneplus/larry vendor/oneplus/sm6375-common kernel/oneplus/sm6375 hardware/oplus && \
 
 repo init --no-repo-verify --git-lfs -u https://github.com/ProjectInfinity-X/manifest -b 16 -g default,-mips,-darwin,-notdefault && \
@@ -7,7 +9,8 @@ repo init --no-repo-verify --git-lfs -u https://github.com/ProjectInfinity-X/man
 git clone https://github.com/imCrest/android_device_oneplus_larry -b infinityx device/oneplus/larry && \
 git clone https://github.com/imCrest/android_device_oneplus_sm6375-common -b lineage-23.2 device/oneplus/sm6375-common && \
 git clone https://gitlab.com/ViaanLarryROMS/proprietary_vendor_oneplus_larry -b 23.2-no-firmware vendor/oneplus/larry && \
-git clone https://github.com/TheMuppets/proprietary_vendor_oneplus_sm6375-common -b lineage-23.2 vendor/oneplus/sm6375-common && \git clone https://github.com/imCrest/android_kernel_oneplus_sm6375 -b lineage-23.2 kernel/oneplus/sm6375 && \
+git clone https://github.com/TheMuppets/proprietary_vendor_oneplus_sm6375-common -b lineage-23.2 vendor/oneplus/sm6375-common && \
+git clone https://github.com/imCrest/android_kernel_oneplus_sm6375 -b lineage-23.2 kernel/oneplus/sm6375 && \
 git clone https://github.com/imCrest/android_hardware_oplus -b lineage-23.2 hardware/oplus && \
 
 export WITH_GMS=true && export TARGET_SUPPORTS_GAPPS=true && export TARGET_SUPPORTS_GSUITE=true && \
@@ -28,35 +31,35 @@ ZIP_GAPPS=$(ls *.zip | head -n 1)
 ROM_VERSION=$(echo "$ZIP_GAPPS" | cut -d'-' -f3)
 [ -z "$ROM_VERSION" ] && ROM_VERSION="3.9"
 
-TAG_NAME="$ROM_VERSION"
+TAG_NAME="ARB-$ROM_VERSION"
 COUNTER=1
 while gh release view "$TAG_NAME" --repo "$GITHUB_REPO" >/dev/null 2>&1; do
-    TAG_NAME="${ROM_VERSION}.${COUNTER}"
+    TAG_NAME="ARB-${ROM_VERSION}.${COUNTER}"
     COUNTER=$((COUNTER + 1))
 done
 
 cd ../../../..
 
 PD_GAPPS_ID=$(upload_to_pd "out/target/product/gapps/$ZIP_GAPPS")
+PD_BOOT_ID=$(upload_to_pd "out/target/product/gapps/boot.img")
+PD_VBOOT_ID=$(upload_to_pd "out/target/product/gapps/vendor_boot.img")
+PD_DTBO_ID=$(upload_to_pd "out/target/product/gapps/dtbo.img")
+
 PD_GAPPS_LINK="https://pixeldrain.com/u/$PD_GAPPS_ID"
+PD_BOOT_LINK="https://pixeldrain.com/u/$PD_BOOT_ID"
+PD_VBOOT_LINK="https://pixeldrain.com/u/$PD_VBOOT_ID"
+PD_DTBO_LINK="https://pixeldrain.com/u/$PD_DTBO_ID"
 
-RELEASE_NOTES="⚠️ **CRITICAL WARNING: READ BEFORE FLASHING** ⚠️
+RELEASE_NOTES="⚠️ **CRITICAL WARNING: [READ README](https://github.com/imCrest/Infinityx-Release) BEFORE FLASHING** ⚠️"
 
-**DO NOT FLASH** if you are on OOS Firmware **1600, 1301 or more (latest versions)**.
-
-1. **ARB Fuse Active:** Switching to custom ROMs on these versions or any newer updates will **HARD BRICK** your device.
-2. **No Software Fix:** Only an **Official OnePlus Service Center** can recover an ARB-bricked phone.
-3. **User Risk:** If you ignore this and proceed, any resulting damage is your own responsibility.
-
----
-**Note:** .img files are from GApps build."
+DISPLAY_VERSION="${TAG_NAME#ARB-}"
 
 gh release create "$TAG_NAME" \
-  "out/target/product/gapps/$ZIP_GAPPS" \
   "out/target/product/gapps/boot.img" \
-  "out/target/product/gapps/vendor_boot.img" \
   "out/target/product/gapps/dtbo.img" \
-  --repo "$GITHUB_REPO" --title "Project Infinity X | larry | $TAG_NAME" --notes "$RELEASE_NOTES"
+  "out/target/product/gapps/vendor_boot.img" \
+  "out/target/product/gapps/$ZIP_GAPPS" \
+  --repo "$GITHUB_REPO" --title "Project Infinity X (ARB) $DISPLAY_VERSION" --notes "$RELEASE_NOTES"
 
 GH_STATUS=$?
 
@@ -70,9 +73,9 @@ if [ $GH_STATUS -eq 0 ]; then
     DTBO_LINK="${BASE_GH_URL}/dtbo.img"
 else
     FINAL_GAPPS_LINK="$PD_GAPPS_LINK"
-    BOOT_LINK="$PD_GAPPS_LINK"
-    V_BOOT_LINK="$PD_GAPPS_LINK"
-    DTBO_LINK="$PD_GAPPS_LINK"
+    BOOT_LINK="$PD_BOOT_LINK"
+    V_BOOT_LINK="$PD_VBOOT_LINK"
+    DTBO_LINK="$PD_DTBO_LINK"
 fi
 
 TELEGRAM_TOKEN="8172049270:AAGg1I0ah8CNV0PwtNg9cTz6AidYQLR4WQw"
@@ -87,16 +90,16 @@ MESSAGE="<b>Project Infinity X (Unofficial) | Android 16 (QPR-2)</b>
 
 <b>Maintainer</b> ~ <a href=\"tg://openmessage?user_id=7911062735\">SUJΛL</a>
 
-<tg-spoiler><b><a href=\"https://github.com/imCrest/Infinityx-Release/tree/main#urgent-warning-read-before-flashing-%EF%B8%8F\">Before Flashing Any Rom Read This Note First</a></b></tg-spoiler>
+<a href=\"https://github.com/imCrest/Infinityx-Release?tab=readme-ov-file\">This build is Arb, ask in community before flashing</a>
 
 Gapps > <a href=\"$FINAL_GAPPS_LINK\">DOWNLOAD</a>
 
-${TAG_NAME}V Changelogs - <a href=\"https://t.me/ProjectInfinityX/1847\">HERE</a>
+${DISPLAY_VERSION}V Changelogs - <a href=\"https://t.me/ProjectInfinityX/1847\">HERE</a>
 Rom Screenshot - <a href=\"https://t.me/ProjectInfinityX/1697?single\">HERE</a>
 Flashing Steps - <a href=\"https://youtu.be/vs2y1MAVWO0?si=FLFk-Igi1Be01SVo\">HERE</a>
 
 Notes:
-<blockquote>1. Dirty Flash will be fine if you using ${PREV_VER1} or ${PREV_VER2} Build</blockquote>
+<blockquote>1. This is ARB Build dirty flash required</blockquote>
 
 <blockquote>2. Here (Gapps)  <a href=\"$BOOT_LINK\">Boot.img</a>  <a href=\"$V_BOOT_LINK\">Vendor_boot.img</a>  <a href=\"$DTBO_LINK\">dtbo.img</a></blockquote>
 
@@ -111,3 +114,15 @@ curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendPhoto" \
 -d photo="$IMAGE_URL" \
 -d parse_mode="HTML" \
 -d caption="$MESSAGE" > /dev/null
+
+PD_MESSAGE="<b>Pixeldrain Mirrors (If GitHub fails):</b>
+• <a href=\"$PD_GAPPS_LINK\">$ZIP_GAPPS</a>
+• <a href=\"$PD_BOOT_LINK\">boot.img</a>
+• <a href=\"$PD_VBOOT_LINK\">vendor_boot.img</a>
+• <a href=\"$PD_DTBO_LINK\">dtbo.img</a>"
+
+curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage" \
+-d chat_id="$CHAT_ID" \
+-d parse_mode="HTML" \
+-d text="$PD_MESSAGE" \
+-d disable_web_page_preview="true" > /dev/null
