@@ -89,7 +89,7 @@ CHAT_ID="7911062735"
 PREV_VER1=$(awk "BEGIN {printf \"%.1f\", $ROM_VERSION - 0.2}")
 PREV_VER2=$(awk "BEGIN {printf \"%.1f\", $ROM_VERSION - 0.1}")
 
-IMAGE_URL="https://raw.githubusercontent.com/imCrest/Infinityx-Release/main/banner.png"
+IMAGE_URL="https://raw.githubusercontent.com/imCrest/Infinityx-Release/main/Banner/banner.png"
 
 MESSAGE="<b>Project Infinity X (Unofficial) | Android 16 (QPR-2)</b>
 <b>Updated: $DATE</b>
