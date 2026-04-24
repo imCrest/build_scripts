@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt-get install gh -y
+sudo apt-get update && sudo apt-get install gh -y
 
 TELEGRAM_TOKEN="8773669605:AAGUh0YE7QLeOIoNqBlJC_aFoUPBDoHAhBM"
 CHAT_ID="7911062735"
