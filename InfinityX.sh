@@ -47,15 +47,7 @@ PD_VANILLA_ID=$(upload_to_pd "out/target/product/vanilla/"*.zip)
 PD_GAPPS_LINK="https://pixeldrain.com/u/$PD_GAPPS_ID"
 PD_VANILLA_LINK="https://pixeldrain.com/u/$PD_VANILLA_ID"
 
-RELEASE_NOTES="PLEASE ANYONE ON THE LATEST 1600 FIRMWARE OR 1301 FIRMWARE, DO NOT FLASH THIS CUSTOM ROM, IT CAUSES HARD BRICKS STILL, MANY PEOPLE  HAVE ENCOUNTERED ISSUES LIKE HARD BRICKS.
-
-1. These firmwares have triggered ARB (Anti Roll Back Fuse), which prevents to go back to any firmware.
-2. Do not flash custom roms on these firmwares and come to us, it will be your fault, if you do so.
-3. No method works as of February 2026, Only OFFICIAL ONEPLUS SERVICE CENTER can fix it.
-4. Instead of finding free fixes, i recommend going to OnePlus Service Center.
-
----
-**Note:** .img files are from GApps build."
+RELEASE_NOTES="Suck my cock"
 
 gh release create "$TAG_NAME" \
   "out/target/product/gapps/$ZIP_GAPPS" \
@@ -102,7 +94,7 @@ Gapps > <a href=\"$FINAL_GAPPS_LINK\">DOWNLOAD</a>
 
 Vanilla > <a href=\"$FINAL_VANILLA_LINK\">DOWNLOAD</a>
 
-${TAG_NAME}V Changelogs - <a href=\"https://t.me/ProjectInfinityX/1847\">HERE</a>
+${TAG_NAME}V Changelogs - paste your changelogs
 Rom Screenshot - <a href=\"https://t.me/ProjectInfinityX/1697?single\">HERE</a>
 Flashing Steps - <a href=\"https://youtu.be/vs2y1MAVWO0?si=FLFk-Igi1Be01SVo\">HERE</a>
 
