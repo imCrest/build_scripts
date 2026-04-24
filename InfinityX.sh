@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sudo apt-get install gh -y
+
 TELEGRAM_TOKEN="8773669605:AAGUh0YE7QLeOIoNqBlJC_aFoUPBDoHAhBM"
 CHAT_ID="7911062735"
 PIXELDRAIN_KEY="f869dbb7-758e-4efa-9440-e1418b1c9916"
@@ -245,9 +247,7 @@ gh release create $TAG_NAME $ZIP_GAPPS boot.img vendor_boot.img dtbo.img --repo 
 
 curl -s -X POST \"https://api.telegram.org/bot$TELEGRAM_TOKEN/sendPhoto\" -d chat_id=\"$CHAT_ID\" -d photo=\"$IMAGE_URL\" -d parse_mode=\"HTML\" -d caption=\"$ENCODED_MESSAGE\"
 
-echo 'Cleaning up downloaded files...'
 rm -f $ZIP_GAPPS boot.img vendor_boot.img dtbo.img release_notes.txt
-echo 'Cleanup complete. Workspace is clean.'
 "
 
     curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage" \
