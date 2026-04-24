@@ -13,11 +13,7 @@ git clone https://github.com/imCrest/android_hardware_oplus -b lineage-23.2 hard
 
 export WITH_GMS=true && export TARGET_SUPPORTS_GAPPS=true && export TARGET_SUPPORTS_GSUITE=true && \
 source build/envsetup.sh && lunch infinity_larry-userdebug && make installclean && mka bacon -j$(nproc) && \
-mv out/target/product/larry out/target/product/gapps && \
-
-export WITH_GMS=false && export TARGET_SUPPORTS_GAPPS=false && export TARGET_SUPPORTS_GSUITE=false && \
-source build/envsetup.sh && lunch infinity_larry-userdebug && make installclean && mka bacon -j$(nproc) && \
-mv out/target/product/larry out/target/product/vanilla
+mv out/target/product/larry out/target/product/gapps
 
 PIXELDRAIN_KEY="f869dbb7-758e-4efa-9440-e1418b1c9916"
 export GITHUB_TOKEN=$MY_GH_TOKEN
@@ -43,15 +39,12 @@ done
 cd ../../../..
 
 PD_GAPPS_ID=$(upload_to_pd "out/target/product/gapps/$ZIP_GAPPS")
-PD_VANILLA_ID=$(upload_to_pd "out/target/product/vanilla/"*.zip)
 PD_GAPPS_LINK="https://pixeldrain.com/u/$PD_GAPPS_ID"
-PD_VANILLA_LINK="https://pixeldrain.com/u/$PD_VANILLA_ID"
 
-RELEASE_NOTES="Suck my Cock"
+RELEASE_NOTES="paste your changelogs"
 
 gh release create "$TAG_NAME" \
   "out/target/product/gapps/$ZIP_GAPPS" \
-  "out/target/product/vanilla/"*.zip \
   "out/target/product/gapps/boot.img" \
   "out/target/product/gapps/vendor_boot.img" \
   "out/target/product/gapps/dtbo.img" \
@@ -66,13 +59,11 @@ BASE_GH_URL="https://github.com/$GITHUB_REPO/releases/download/$TAG_NAME"
 
 if [ $GH_STATUS -eq 0 ]; then
     FINAL_GAPPS_LINK="$GH_RELEASE_PAGE"
-    FINAL_VANILLA_LINK="$GH_RELEASE_PAGE"
     BOOT_LINK="${BASE_GH_URL}/boot.img"
     V_BOOT_LINK="${BASE_GH_URL}/vendor_boot.img"
     DTBO_LINK="${BASE_GH_URL}/dtbo.img"
 else
     FINAL_GAPPS_LINK="$PD_GAPPS_LINK"
-    FINAL_VANILLA_LINK="$PD_VANILLA_LINK"
     BOOT_LINK="$PD_GAPPS_LINK"
     V_BOOT_LINK="$PD_GAPPS_LINK"
     DTBO_LINK="$PD_GAPPS_LINK"
@@ -91,8 +82,6 @@ MESSAGE="<b>Project Infinity X (Unofficial) | Non-ARB | Android 16 (QPR-2)</b>
 <b>Maintainer</b> ~ <a href=\"tg://openmessage?user_id=7911062735\">SUJΛL</a>
 
 Gapps > <a href=\"$FINAL_GAPPS_LINK\">DOWNLOAD</a>
-
-Vanilla > <a href=\"$FINAL_VANILLA_LINK\">DOWNLOAD</a>
 
 ${TAG_NAME}V Changelogs - paste your changelogs
 Rom Screenshot - <a href=\"https://t.me/ProjectInfinityX/1697?single\">HERE</a>
