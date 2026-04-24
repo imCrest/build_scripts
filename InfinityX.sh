@@ -41,7 +41,7 @@ cd ../../../..
 PD_GAPPS_ID=$(upload_to_pd "out/target/product/gapps/$ZIP_GAPPS")
 PD_GAPPS_LINK="https://pixeldrain.com/u/$PD_GAPPS_ID"
 
-RELEASE_NOTES="paste your changelogs"
+RELEASE_NOTES=""
 
 gh release create "$TAG_NAME" \
   "out/target/product/gapps/$ZIP_GAPPS" \
@@ -83,7 +83,7 @@ MESSAGE="<b>Project Infinity X (Unofficial) | Non-ARB | Android 16 (QPR-2)</b>
 
 Gapps > <a href=\"$FINAL_GAPPS_LINK\">DOWNLOAD</a>
 
-${TAG_NAME}V Changelogs - paste your changelogs
+${TAG_NAME}V Changelogs - <a href=\"$GH_RELEASE_PAGE\">View Here</a>
 Rom Screenshot - <a href=\"https://t.me/ProjectInfinityX/1697?single\">HERE</a>
 Flashing Steps - <a href=\"https://youtu.be/vs2y1MAVWO0?si=FLFk-Igi1Be01SVo\">HERE</a>
 
