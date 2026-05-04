@@ -50,7 +50,81 @@ PD_BOOT_LINK="https://pixeldrain.com/u/$PD_BOOT_ID"
 PD_VBOOT_LINK="https://pixeldrain.com/u/$PD_VBOOT_ID"
 PD_DTBO_LINK="https://pixeldrain.com/u/$PD_DTBO_ID"
 
-RELEASE_NOTES="⚠️ **CRITICAL WARNING: [READ README](https://github.com/imCrest/Infinityx-Release) BEFORE FLASHING** ⚠️"
+RELEASE_NOTES="Add QS Panel styles (HyperOS/OxygenOS/InfinityX Style)
+
+Add statusbar icon packs, signal-wifi icon styles, battery icon styles and charging animations
+
+Fixed MyAirtel app and DigiLocker app crash and fixed other tons of banking apps
+
+Switch GameSpace implementation to AxionOS's gamespace
+
+Allow changing system emoji styles to iOS or Samsung
+
+Make lockscreen notifications appear over depth wallpaper
+
+Add OmniJaws frontend inbuilt weather app
+
+Fixed Firefox/browsers SystemUI crash on media playing when dynamic bar enabled
+
+Fixed headsup dialer notification on incoming calls when dynamic bar enabled
+
+Fixed dynamic bar download/other progress bars not updating on click to show expanded event & re-design dynamic bar lockscreen media popup view
+
+Improve dynamic bar battery view on lockscreen along with actual charging info stats also allow to disable
+
+Fixed dynamic bar messed up statusbar padding for some devices (eg. overlapping with statusbar or touching statusbar clock etc.)
+
+Align dynamicbar lockscreen chip with keyguard indication margin
+
+Suppress Dynamic Bar notifications when Danmaku notification is active
+
+Added more screenrecorder options
+
+Add QS Tiles animation styles
+
+Enable statusbar burn-in protection for all devices by default
+
+Restore stock android lockscreen bottom shortcut buttons along with size and paddings
+
+Allow single tap behaviour instead of hold for lockscreen bottom shortcut buttons
+
+Allow applying Monet colors to the lockscreen PIN and pattern screen (bouncer) view
+
+Add feature to allow launching app in freeform window by swiping and holding it up in recents panel
+
+Fixed smart pixels complete device freezing on use and improve logic
+
+Make expanded volume panel ringer button shape completely circular
+
+Add 2 new pulse styles along with toggle to configure bass haptics playback
+
+Fixed QS tile inconsistent gradient colors with single tone tile style
+
+Fixed camouflaging notifications footer buttons when alternate notification color enabled
+
+Allow to show pure black/white qs notifications when alternate notification color disabled
+
+Make statusbar display on lockscreen when media album art in use
+
+Force disable all annoying inconsistent qs tile squish effects
+
+New customizations for sidebar
+
+Allow hiding lockscreen clock
+
+Make volume slider haptics toggle work on expanded volume style too
+
+Make idle manager more consistent and aggressive
+
+Add toggle to prevent apps from launching the "Get this app from Play" screen when not installed from Play Store
+
+Live circle battery style colors based on events like low battery or charging
+
+Improve animations performance and system fluidity
+
+Improve QS Panel janks/lag scenarios with plenty of notifications
+
+Disable unnecessary logging and overhead conditions impacting performance and leading to battery drains"
 
 DISPLAY_VERSION="${TAG_NAME#ARB-}"
 
@@ -78,7 +152,7 @@ else
     DTBO_LINK="$PD_DTBO_LINK"
 fi
 
-TELEGRAM_TOKEN="8172049270:AAGg1I0ah8CNV0PwtNg9cTz6AidYQLR4WQw"
+TELEGRAM_TOKEN="8172049270:AAGCCwse_qhY34zhm4vSKd6LNNoyTy-YFpY"
 CHAT_ID="7911062735"
 PREV_VER1=$(awk "BEGIN {printf \"%.1f\", $ROM_VERSION - 0.2}")
 PREV_VER2=$(awk "BEGIN {printf \"%.1f\", $ROM_VERSION - 0.1}")
