@@ -1,1 +1,1 @@
-r5.4xlarge
+m8id.4xlarge
