@@ -8,11 +8,13 @@ if [ -z "$EPHEMERAL_DISK" ] && [ -b "/dev/nvme1n1" ]; then
 fi
 
 if [ -n "$EPHEMERAL_DISK" ]; then
-    if ! blkid "$EPHEMERAL_DISK" > /dev/null 2>&1; then
-        sudo mkfs.ext4 -F -E nodiscard "$EPHEMERAL_DISK"
+    if ! lsblk -f "$EPHEMERAL_DISK" | grep -q "ext4"; then
+        sudo mkfs.ext4 -F "$EPHEMERAL_DISK"
     fi
     sudo mkdir -p /mnt/build
-    sudo mount -o defaults,noatime,barrier=0 "$EPHEMERAL_DISK" /mnt/build
+    if ! grep -qs '/mnt/build' /proc/mounts; then
+        sudo mount -o defaults,noatime "$EPHEMERAL_DISK" /mnt/build
+    fi
     sudo chown -R "$USER":"$USER" /mnt/build
     mkdir -p /mnt/build/infinityx /mnt/build/.ccache
     rm -rf "$HOME/infinityx" "$HOME/.ccache"
@@ -25,7 +27,7 @@ fi
 sudo apt update
 sudo apt install -y git git-lfs curl zip unzip bc bison build-essential clang \
 ccache flex g++-multilib gcc-multilib gnupg gperf imagemagick lib32readline-dev \
-lib32z1-dev liblz4-tool libncurses-dev libssl-dev libxml2-utils lzop openjdk-17-jdk \
+lib32z1-dev lz4 libncurses-dev libssl-dev libxml2-utils lzop openjdk-17-jdk \
 python-is-python3 python3-pip python3-setuptools python3-yaml rsync schedtool \
 squashfs-tools xsltproc zlib1g-dev tmux rclone
 
