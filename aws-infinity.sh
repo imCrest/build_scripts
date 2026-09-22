@@ -24,10 +24,10 @@ upload_to_pd () {
     curl -s -T "$1" -u :$PIXELDRAIN_KEY https://pixeldrain.com/api/file/ | sed -n 's/.*"id":"\([^"]*\)".*/\1/p'
 }
 
-DATE=$(date +'%d/%B/%Y')
+DATE=$(date +'%d-%m-%Y')
 cd out/target/product/gapps
 ZIP_GAPPS=$(ls *.zip | head -n 1)
-ROM_VERSION=$(echo "$ZIP_GAPPS" | cut -d'-' -f3)
+ROM_VERSION=$(cut -d'-' -f3 <<< "$ZIP_GAPPS")
 [ -z "$ROM_VERSION" ] && ROM_VERSION="3.9"
 
 TAG_NAME="ARB-$ROM_VERSION"
@@ -127,29 +127,69 @@ Disable unnecessary logging and overhead conditions impacting performance and le
 
 DISPLAY_VERSION="${TAG_NAME#ARB-}"
 
-gh release create "$TAG_NAME" \
-  "out/target/product/gapps/boot.img" \
-  "out/target/product/gapps/dtbo.img" \
-  "out/target/product/gapps/vendor_boot.img" \
+SF_USER="${SF_USER:-sujxl}"
+SF_DEST="${SF_USER}@frs.sourceforge.net:/home/frs/project/larry-rom-archive/Infinity-X/${DATE}/GAPPS/"
+rsync -avP -e "ssh -o StrictHostKeyChecking=accept-new" --rsync-path="mkdir -p /home/frs/project/larry-rom-archive/Infinity-X/${DATE}/GAPPS && rsync" \
   "out/target/product/gapps/$ZIP_GAPPS" \
-  --repo "$GITHUB_REPO" --title "Project Infinity X (ARB) $DISPLAY_VERSION" --notes "$RELEASE_NOTES"
+  "out/target/product/gapps/boot.img" \
+  "out/target/product/gapps/vendor_boot.img" \
+  "out/target/product/gapps/dtbo.img" \
+  "$SF_DEST"
 
-GH_STATUS=$?
+SF_GAPPS_URL="https://downloads.sourceforge.net/project/larry-rom-archive/Infinity-X/${DATE}/GAPPS/${ZIP_GAPPS}"
+SF_BOOT_URL="https://downloads.sourceforge.net/project/larry-rom-archive/Infinity-X/${DATE}/GAPPS/boot.img"
+SF_VBOOT_URL="https://downloads.sourceforge.net/project/larry-rom-archive/Infinity-X/${DATE}/GAPPS/vendor_boot.img"
+SF_DTBO_URL="https://downloads.sourceforge.net/project/larry-rom-archive/Infinity-X/${DATE}/GAPPS/dtbo.img"
 
-GH_RELEASE_PAGE="https://github.com/$GITHUB_REPO/releases/tag/$TAG_NAME"
-BASE_GH_URL="https://github.com/$GITHUB_REPO/releases/download/$TAG_NAME"
+ZIP_SIZE=$(stat -c%s "out/target/product/gapps/$ZIP_GAPPS")
+ZIP_MD5=$(md5sum "out/target/product/gapps/$ZIP_GAPPS" | cut -d" " -f1)
+ZIP_TIMESTAMP=$(grep -m1 "ro.build.date.utc=" out/target/product/gapps/system/build.prop 2>/dev/null | cut -d"=" -f2)
+[ -z "$ZIP_TIMESTAMP" ] && ZIP_TIMESTAMP=$(date +%s)
 
-if [ $GH_STATUS -eq 0 ]; then
-    FINAL_GAPPS_LINK="$GH_RELEASE_PAGE"
-    BOOT_LINK="${BASE_GH_URL}/boot.img"
-    V_BOOT_LINK="${BASE_GH_URL}/vendor_boot.img"
-    DTBO_LINK="${BASE_GH_URL}/dtbo.img"
+if [ "$ZIP_SIZE" -lt 2147483648 ]; then
+    gh release create "$TAG_NAME" \
+      "out/target/product/gapps/boot.img" \
+      "out/target/product/gapps/dtbo.img" \
+      "out/target/product/gapps/vendor_boot.img" \
+      "out/target/product/gapps/$ZIP_GAPPS" \
+      --repo "$GITHUB_REPO" --title "Project Infinity X (ARB) $DISPLAY_VERSION" --notes "$RELEASE_NOTES"
+    GH_STATUS=$?
 else
-    FINAL_GAPPS_LINK="$PD_GAPPS_LINK"
-    BOOT_LINK="$PD_BOOT_LINK"
-    V_BOOT_LINK="$PD_VBOOT_LINK"
-    DTBO_LINK="$PD_DTBO_LINK"
+    gh release create "$TAG_NAME" \
+      "out/target/product/gapps/boot.img" \
+      "out/target/product/gapps/dtbo.img" \
+      "out/target/product/gapps/vendor_boot.img" \
+      --repo "$GITHUB_REPO" --title "Project Infinity X (ARB) $DISPLAY_VERSION" --notes "$RELEASE_NOTES"
+    GH_STATUS=$?
 fi
+
+rm -rf /tmp/Infinityx-Release
+git clone "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPO}.git" /tmp/Infinityx-Release
+cat << EOF > /tmp/Infinityx-Release/larry.json
+{
+  "response": [
+    {
+      "filename": "$ZIP_GAPPS",
+      "download": "$SF_GAPPS_URL",
+      "timestamp": $ZIP_TIMESTAMP,
+      "md5": "$ZIP_MD5",
+      "size": $ZIP_SIZE,
+      "version": "$ROM_VERSION"
+    }
+  ]
+}
+EOF
+git -C /tmp/Infinityx-Release config user.name "imCrest"
+git -C /tmp/Infinityx-Release config user.email "crest@infinity-x.org"
+git -C /tmp/Infinityx-Release add larry.json
+git -C /tmp/Infinityx-Release commit -m "Update larry.json: ${ROM_VERSION} (${DATE})"
+git -C /tmp/Infinityx-Release push origin main
+rm -rf /tmp/Infinityx-Release
+
+FINAL_GAPPS_LINK="$SF_GAPPS_URL"
+BOOT_LINK="$SF_BOOT_URL"
+V_BOOT_LINK="$SF_VBOOT_URL"
+DTBO_LINK="$SF_DTBO_URL" 
 
 TELEGRAM_TOKEN="8172049270:AAGCCwse_qhY34zhm4vSKd6LNNoyTy-YFpY"
 CHAT_ID="7911062735"
