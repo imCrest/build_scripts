@@ -127,11 +127,11 @@ Disable unnecessary logging and overhead conditions impacting performance and le
 
 DISPLAY_VERSION="${TAG_NAME#ARB-}"
 
-SF_USER="${SF_USER:-sujxl}"
-SF_DEST="${SF_USER}@frs.sourceforge.net:/home/frs/project/larry-rom-archive/Infinity-X/${DATE}/GAPPS/"
+SF_USER="${SF_USER:-imcrest}"
+SF_DEST="${SF_USER}@frs.sourceforge.net:/home/frs/project/infinity-x-larry/Infinity-X/${DATE}/GAPPS/"
 sftp -b - -o StrictHostKeyChecking=accept-new "${SF_USER}@frs.sourceforge.net" << EOF
--mkdir /home/frs/project/larry-rom-archive/Infinity-X/${DATE}
--mkdir /home/frs/project/larry-rom-archive/Infinity-X/${DATE}/GAPPS
+-mkdir /home/frs/project/infinity-x-larry/Infinity-X/${DATE}
+-mkdir /home/frs/project/infinity-x-larry/Infinity-X/${DATE}/GAPPS
 EOF
 rsync -avP -e "ssh -o StrictHostKeyChecking=accept-new" \
   "out/target/product/gapps/$ZIP_GAPPS" \
@@ -140,10 +140,10 @@ rsync -avP -e "ssh -o StrictHostKeyChecking=accept-new" \
   "out/target/product/gapps/dtbo.img" \
   "$SF_DEST"
 
-SF_GAPPS_URL="https://downloads.sourceforge.net/project/larry-rom-archive/Infinity-X/${DATE}/GAPPS/${ZIP_GAPPS}"
-SF_BOOT_URL="https://downloads.sourceforge.net/project/larry-rom-archive/Infinity-X/${DATE}/GAPPS/boot.img"
-SF_VBOOT_URL="https://downloads.sourceforge.net/project/larry-rom-archive/Infinity-X/${DATE}/GAPPS/vendor_boot.img"
-SF_DTBO_URL="https://downloads.sourceforge.net/project/larry-rom-archive/Infinity-X/${DATE}/GAPPS/dtbo.img"
+SF_GAPPS_URL="https://downloads.sourceforge.net/project/infinity-x-larry/Infinity-X/${DATE}/GAPPS/${ZIP_GAPPS}"
+SF_BOOT_URL="https://downloads.sourceforge.net/project/infinity-x-larry/Infinity-X/${DATE}/GAPPS/boot.img"
+SF_VBOOT_URL="https://downloads.sourceforge.net/project/infinity-x-larry/Infinity-X/${DATE}/GAPPS/vendor_boot.img"
+SF_DTBO_URL="https://downloads.sourceforge.net/project/infinity-x-larry/Infinity-X/${DATE}/GAPPS/dtbo.img"
 
 ZIP_SIZE=$(stat -c%s "out/target/product/gapps/$ZIP_GAPPS")
 ZIP_MD5=$(md5sum "out/target/product/gapps/$ZIP_GAPPS" | cut -d" " -f1)
