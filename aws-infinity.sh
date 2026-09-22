@@ -129,11 +129,11 @@ DISPLAY_VERSION="${TAG_NAME#ARB-}"
 
 SF_USER="${SF_USER:-imcrest}"
 SF_DEST="${SF_USER}@frs.sourceforge.net:/home/frs/project/infinity-x-larry/Infinity-X/${DATE}/GAPPS/"
-sftp -b - -o StrictHostKeyChecking=accept-new "${SF_USER}@frs.sourceforge.net" << EOF
+sftp -b - -o StrictHostKeyChecking=accept-new -o ServerAliveInterval=15 -o ServerAliveCountMax=4 "${SF_USER}@frs.sourceforge.net" << EOF
 -mkdir /home/frs/project/infinity-x-larry/Infinity-X/${DATE}
 -mkdir /home/frs/project/infinity-x-larry/Infinity-X/${DATE}/GAPPS
 EOF
-rsync -avP -e "ssh -o StrictHostKeyChecking=accept-new" \
+rsync -avP --whole-file --inplace -e "ssh -o StrictHostKeyChecking=accept-new -o ServerAliveInterval=15 -o ServerAliveCountMax=4 -o TCPKeepAlive=yes -c aes128-gcm@openssh.com" \
   "out/target/product/gapps/$ZIP_GAPPS" \
   "out/target/product/gapps/boot.img" \
   "out/target/product/gapps/vendor_boot.img" \
