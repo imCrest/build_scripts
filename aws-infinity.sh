@@ -129,7 +129,11 @@ DISPLAY_VERSION="${TAG_NAME#ARB-}"
 
 SF_USER="${SF_USER:-sujxl}"
 SF_DEST="${SF_USER}@frs.sourceforge.net:/home/frs/project/larry-rom-archive/Infinity-X/${DATE}/GAPPS/"
-rsync -avP -e "ssh -o StrictHostKeyChecking=accept-new" --rsync-path="mkdir -p /home/frs/project/larry-rom-archive/Infinity-X/${DATE}/GAPPS && rsync" \
+sftp -b - -o StrictHostKeyChecking=accept-new "${SF_USER}@frs.sourceforge.net" << EOF
+-mkdir /home/frs/project/larry-rom-archive/Infinity-X/${DATE}
+-mkdir /home/frs/project/larry-rom-archive/Infinity-X/${DATE}/GAPPS
+EOF
+rsync -avP -e "ssh -o StrictHostKeyChecking=accept-new" \
   "out/target/product/gapps/$ZIP_GAPPS" \
   "out/target/product/gapps/boot.img" \
   "out/target/product/gapps/vendor_boot.img" \
@@ -196,7 +200,7 @@ CHAT_ID="7911062735"
 PREV_VER1=$(awk "BEGIN {printf \"%.1f\", $ROM_VERSION - 0.2}")
 PREV_VER2=$(awk "BEGIN {printf \"%.1f\", $ROM_VERSION - 0.1}")
 
-IMAGE_URL="https://raw.githubusercontent.com/imCrest/Infinityx-Release/main/banner.png"
+IMAGE_URL="https://raw.githubusercontent.com/imCrest/Infinityx-Release/main/Banner/banner.png"
 
 MESSAGE="<b>Project Infinity X (Unofficial) | Android 16 (QPR-2)</b>
 <b>Updated: $DATE</b>
@@ -228,14 +232,16 @@ curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendPhoto" \
 -d parse_mode="HTML" \
 -d caption="$MESSAGE" > /dev/null
 
-PD_MESSAGE="<b>Pixeldrain Mirrors (If GitHub fails):</b>
+if [ -n "$PD_GAPPS_ID" ]; then
+    PD_MESSAGE="<b>Pixeldrain Mirrors:</b>
 • <a href=\"$PD_GAPPS_LINK\">$ZIP_GAPPS</a>
 • <a href=\"$PD_BOOT_LINK\">boot.img</a>
 • <a href=\"$PD_VBOOT_LINK\">vendor_boot.img</a>
 • <a href=\"$PD_DTBO_LINK\">dtbo.img</a>"
 
-curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage" \
--d chat_id="$CHAT_ID" \
--d parse_mode="HTML" \
--d text="$PD_MESSAGE" \
--d disable_web_page_preview="true" > /dev/null
+    curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage" \
+    -d chat_id="$CHAT_ID" \
+    -d parse_mode="HTML" \
+    -d text="$PD_MESSAGE" \
+    -d disable_web_page_preview="true" > /dev/null
+fi
