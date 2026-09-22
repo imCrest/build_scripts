@@ -28,7 +28,7 @@ upload_to_pd () {
 DATE=$(date +'%d-%m-%Y')
 cd out/target/product/gapps
 ZIP_GAPPS=$(ls *.zip | head -n 1)
-ROM_VERSION=$(echo "$ZIP_GAPPS" | cut -d'-' -f3)
+ROM_VERSION=$(cut -d'-' -f3 <<< "$ZIP_GAPPS")
 [ -z "$ROM_VERSION" ] && ROM_VERSION="3.9"
 
 TAG_NAME="ARB-$ROM_VERSION"
