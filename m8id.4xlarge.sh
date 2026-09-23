@@ -31,22 +31,53 @@ lib32z1-dev lz4 libncurses-dev libssl-dev libxml2-utils lzop openjdk-17-jdk \
 python-is-python3 python3-pip python3-setuptools python3-yaml rsync schedtool \
 squashfs-tools xsltproc zlib1g-dev tmux rclone
 
+type -p gh >/dev/null || (curl -fsSL https://cli.github.com/packages/install.sh | sudo sh)
+
 git lfs install
+
+git config --global user.name "C R E S T"
+git config --global user.email "217463890+imCrest@users.noreply.github.com"
+
+mkdir -p "$HOME/.ssh"
+chmod 700 "$HOME/.ssh"
+
+cat << 'EOF' > "$HOME/.ssh/id_ed25519"
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+QyNTUxOQAAACCu83wOPaDi1ie5hMVVdVIOq8oESIPY0MlpASOBsy2USwAAAJiZY1ncmWNZ
+3AAAAAtzc2gtZWQyNTUxOQAAACCu83wOPaDi1ie5hMVVdVIOq8oESIPY0MlpASOBsy2USw
+AAAEBvqdXCqViUqt63XC9SnoQ0796Cuo7aG6qrrm3AZ/7Qna7zfA49oOLWJ7mExVV1Uhqj
+ygRIg9jQyWkBI4GzLZRLAAAAEVB1cnJmZWN0QFB1cnJmZWN0AQIDBA==
+-----END OPENSSH PRIVATE KEY-----
+EOF
+chmod 600 "$HOME/.ssh/id_ed25519"
+
+cat << 'EOF' > "$HOME/.ssh/config"
+Host frs.sourceforge.net
+    IdentityFile ~/.ssh/id_ed25519
+    StrictHostKeyChecking accept-new
+    ServerAliveInterval 15
+    ServerAliveCountMax 4
+    TCPKeepAlive yes
+EOF
+chmod 600 "$HOME/.ssh/config"
 
 mkdir -p "$HOME/bin"
 curl -s https://storage.googleapis.com/git-repo-downloads/repo > "$HOME/bin/repo"
 chmod +x "$HOME/bin/repo"
 
-ENV_VARS='export PATH=$HOME/bin:$PATH
+if ! grep -q "USE_CCACHE" "$HOME/.bashrc"; then
+cat << 'EOF' >> "$HOME/.bashrc"
+export PATH=$HOME/bin:$PATH
 export USE_CCACHE=1
 export CCACHE_EXEC=/usr/bin/ccache
 export CCACHE_DIR=$HOME/.ccache
 export CCACHE_BASEDIR=$HOME/infinityx
 export CCACHE_COMPRESS=1
 export CCACHE_COMPRESSLEVEL=6
-export CCACHE_SLOPPINESS=time_macros'
-
-grep -q "USE_CCACHE" "$HOME/.bashrc" || echo "$ENV_VARS" >> "$HOME/.bashrc"
+export CCACHE_SLOPPINESS=time_macros
+EOF
+fi
 
 export PATH="$HOME/bin:$PATH"
 export USE_CCACHE=1
