@@ -16,7 +16,7 @@ export WITH_GMS=true && export TARGET_SUPPORTS_GAPPS=true && export TARGET_SUPPO
 source build/envsetup.sh && lunch infinity_larry-userdebug && make installclean && mka bacon -j$(nproc) && \
 mv out/target/product/larry out/target/product/gapps
 
-PIXELDRAIN_KEY="f869dbb7-758e-4efa-9440-e1418b1c9916"
+PIXELDRAIN_KEY="5e3368e8-606b-4dcc-bdc3-12a03e50e78d"
 export GITHUB_TOKEN=$MY_GH_TOKEN
 GITHUB_REPO="imCrest/Infinityx-Release"
 
